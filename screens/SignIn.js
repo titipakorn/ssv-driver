@@ -1,5 +1,12 @@
 import React from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+} from 'react-native';
 import {AuthContext} from '../App';
 
 const styles = StyleSheet.create({
@@ -19,7 +26,7 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
     paddingTop: 10,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
 });
 
@@ -45,6 +52,7 @@ async function login({username, password}) {
 }
 
 export default function SignInScreen() {
+  const [loading, setLoading] = React.useState(false);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [errMsg, setErrMsg] = React.useState('');
@@ -82,17 +90,20 @@ export default function SignInScreen() {
         }}
       />
       <Button
-        title="Sign in"
-        disabled={username.length == 0 || password.length == 0}
+        title={loading ? 'Working... ' : 'Sign in'}
+        disabled={loading || username.length == 0 || password.length == 0}
         onPress={async () => {
+          setLoading(true);
           const resp = await login({username, password});
           if (resp.error !== undefined) {
             setErrMsg(resp.error);
           } else {
             signIn(resp);
           }
+          setLoading(false);
         }}
       />
+      {loading && <ActivityIndicator />}
     </View>
   );
 }
