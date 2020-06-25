@@ -6,6 +6,9 @@ import {createStackNavigator} from '@react-navigation/stack';
 import HomeTabs from './screens/HomeTabs';
 import SplashScreen from './screens/Splash';
 import SignInScreen from './screens/SignIn';
+import Icon from 'react-native-vector-icons/Ionicons';
+
+Icon.loadFont();
 
 const Stack = createStackNavigator();
 export const AuthContext = React.createContext();
@@ -94,7 +97,10 @@ const App = () => {
   return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}>
           {state.isLoading ? (
             // We haven't finished checking for the token yet
             <Stack.Screen name="Splash" component={SplashScreen} />
@@ -113,7 +119,7 @@ const App = () => {
             <Stack.Screen
               name="Home"
               component={HomeTabs}
-              options={{title: 'Welcome'}}
+              // options={{title: 'Welcome'}}
             />
           )}
         </Stack.Navigator>

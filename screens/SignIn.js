@@ -2,6 +2,7 @@ import React from 'react';
 import {
   ActivityIndicator,
   Button,
+  SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
@@ -27,6 +28,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 10,
     paddingBottom: 10,
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: 30,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
 });
 
@@ -59,10 +66,10 @@ export default function SignInScreen() {
   const {signIn} = React.useContext(AuthContext);
 
   return (
-    <View>
-      {/* <Text numberOfLines={1} style={styles.label}>
-        Your credential
-      </Text> */}
+    <SafeAreaView>
+      <Text numberOfLines={1} style={styles.title}>
+        Sign In
+      </Text>
       {errMsg.length > 0 && <Text style={styles.error}>{errMsg}</Text>}
       <TextInput
         placeholder="Username"
@@ -90,7 +97,7 @@ export default function SignInScreen() {
         }}
       />
       <Button
-        title={loading ? 'Working... ' : 'Sign in'}
+        title={loading ? 'Working... ' : 'Log in'}
         disabled={loading || username.length == 0 || password.length == 0}
         onPress={async () => {
           setLoading(true);
@@ -104,6 +111,6 @@ export default function SignInScreen() {
         }}
       />
       {loading && <ActivityIndicator />}
-    </View>
+    </SafeAreaView>
   );
 }
