@@ -1,25 +1,9 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 import AsyncStorage from '@react-native-community/async-storage';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
-import HomeScreen from './screens/Home';
-import Default from './screens/Default';
+import HomeTabs from './screens/HomeTabs';
 import SplashScreen from './screens/Splash';
 import SignInScreen from './screens/SignIn';
 
@@ -126,18 +110,12 @@ const App = () => {
               }}
             />
           ) : (
-            <>
-              {/* // User is signed in */}
-              <Stack.Screen name="Home" component={HomeScreen} />
-              <Stack.Screen name="Profile" component={Default} />
-            </>
+            <Stack.Screen
+              name="Home"
+              component={HomeTabs}
+              options={{title: 'Welcome'}}
+            />
           )}
-          {/* <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{title: 'Welcome'}}
-          />
-          <Stack.Screen name="Profile" component={Default} /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
