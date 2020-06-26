@@ -5,13 +5,15 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../App';
 import Default from './Default';
 import gql from 'graphql-tag';
-import {useQuery} from '@apollo/react-hooks';
+import {useQuery, useSubscription} from '@apollo/react-hooks';
 
 const Tab = createBottomTabNavigator();
 
 const QUEUE_SUBSCRIPTION = gql`
-  query QUEUE_SUBSCRIPTION {
-    items: trip(where: {dropped_off_at: {_is_null: true}, _or: [{driver_id: null}]}) {
+  subscription QUEUE_SUBSCRIPTION {
+    items: trip(
+      where: {dropped_off_at: {_is_null: true}, _or: [{driver_id: null}]}
+    ) {
       id
       place_from
       place_to
@@ -26,14 +28,16 @@ const QUEUE_SUBSCRIPTION = gql`
 `;
 
 export function IndexScreen({navigation}) {
-  const {loading, error, data} = useQuery(QUEUE_SUBSCRIPTION, {
+  const {loading, error, data} = useSubscription(QUEUE_SUBSCRIPTION, {
+    shouldResubscribe: true,
     variables: {},
   });
   const {signOut} = React.useContext(AuthContext);
-  console.log(loading, error, data);
+  console.log('Index WSS: ', loading, error, data);
   return (
     <SafeAreaView>
       <Text>Signed in!</Text>
+      <Text>Result from GQL subscription: {data && data.items.length}</Text>
       <Button title="Sign out" onPress={signOut} />
       <Button
         title="Go to Jane's profile"

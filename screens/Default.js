@@ -15,6 +15,8 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import gql from 'graphql-tag';
+import {useQuery} from '@apollo/react-hooks';
 
 const styles = StyleSheet.create({
   scrollView: {
@@ -55,7 +57,29 @@ const styles = StyleSheet.create({
   },
 });
 
+const AVAILABLE_JOB_QUERY = gql`
+  query AVAILABLE_JOB_QUERY {
+    items: trip(
+      where: {dropped_off_at: {_is_null: true}, _or: [{driver_id: null}]}
+    ) {
+      id
+      place_from
+      place_to
+      user {
+        username
+      }
+      is_advanced_reservation
+      reserved_at
+      picked_up_at
+    }
+  }
+`;
+
 export default function DefaultScreen({navigation}) {
+  const {loading, error, data} = useQuery(AVAILABLE_JOB_QUERY, {
+    variables: {},
+  });
+  console.log('DefaultScreen: ', loading, error, data);
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -68,6 +92,7 @@ export default function DefaultScreen({navigation}) {
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
           {/* <Header /> */}
+          <Text>Result from GQL Query: {data && data.items.length}</Text>
           {global.HermesInternal == null ? null : (
             <View style={styles.engine}>
               <Text style={styles.footer}>Engine: Hermes</Text>
