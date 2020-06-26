@@ -1,39 +1,51 @@
-import { ApolloClient } from "apollo-client"
-import { InMemoryCache } from "apollo-cache-inmemory"
-import { setContext } from "apollo-link-context"
-import { getToken, getUserId, getRole } from "./auth"
+import AsyncStorage from '@react-native-community/async-storage';
+import {ApolloClient} from 'apollo-client';
+import {HttpLink} from 'apollo-link-http';
+import {InMemoryCache} from 'apollo-cache-inmemory';
+import {setContext} from 'apollo-link-context';
+import {onError} from 'apollo-link-error';
 
-const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  const token = getToken()
-  // return the headers to the context so httpLink can read them
-  if (!token) return headers
-  // supported roles: user, mod // God has no power here!
-  let h = {
-    "X-Hasura-User-Id": getUserId(),
-    "X-Hasura-Role": getRole(),
-  }
-  if (token) {
-    h["Authorization"] = `Bearer ${token}`
-  }
+const httpLink = new HttpLink({uri: 'https://gql.10z.dev/v1/graphql'});
 
+let token;
+const withToken = setContext(async request => {
+  let headers;
+  if (!token) {
+    const val = await AsyncStorage.getItem('userResp');
+    let u = JSON.parse(val);
+    token = u.token;
+    headers = {
+      Authorization: `Bearer ${u.token}`,
+      'X-Hasura-User-Id': u.username,
+      'X-Hasura-Role': u.roles.length > 0 ? u.roles[0] : '',
+    };
+    return { headers }
+  }
   return {
-    headers: {
-      ...headers,
-      ...h,
-    },
+    headers: {}
   }
-})
+  // console.log('WITH TOKEN: ', u, token)
+  // const h = {
+  //   headers: ,
+  // };
+  // console.log(h)
+  // return h
+});
 
-/**
- * Creates and configures the ApolloClient
- * @param  {Object} [initialState={}]
- */
-export function createApolloClient(initialState = {}) {
-  return new ApolloClient({
-    ssrMode: typeof window === "undefined", // Disables forceFetch on the server (so queries are only run once)
-    link: authLink,
-    cache: new InMemoryCache().restore(initialState),
-    credentials: "include",
-  })
-}
+const resetToken = onError(({networkError}) => {
+  if (networkError && networkError.statusCode === 401) {
+    // remove cached token on 401 from the server
+    token = undefined;
+  }
+});
+
+const authFlowLink = withToken.concat(resetToken);
+
+const link = authFlowLink.concat(httpLink);
+
+const cache = new InMemoryCache();
+
+export default new ApolloClient({
+  link,
+  cache,
+});
