@@ -23,6 +23,7 @@
     "apollo-link-error": "^1.1.13",
     "apollo-link-http": "^1.5.17",
     "apollo-link-ws": "^1.0.20",
+    "dayjs": "^1.8.28",
     "graphql": "^15.1.0",
     "graphql-tag": "^2.10.3",
     "react": "16.11.0",
