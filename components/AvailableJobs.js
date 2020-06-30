@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import gql from 'graphql-tag';
 import {useSubscription} from '@apollo/react-hooks';
-import {bkkTime} from '../libs/day';
+import {relativeTime, displayTime} from '../libs/day';
 
 const QUEUE_SUBSCRIPTION = gql`
   subscription QUEUE_SUBSCRIPTION($userId: uuid) {
@@ -22,8 +22,8 @@ const QUEUE_SUBSCRIPTION = gql`
       order_by: {reserved_at: desc}
     ) {
       id
-      place_from
-      place_to
+      from
+      to
       user {
         username
       }
@@ -35,27 +35,50 @@ const QUEUE_SUBSCRIPTION = gql`
 `;
 
 function Item(row) {
-  const {id, place_from, place_to, reserved_at, onSelect, selected} = row;
-  console.log(row);
+  const {navigation, id, from, to, tmPrimary, tmSecondary, onSelect} = row;
   return (
     <TouchableHighlight
       activeOpacity={0.8}
       underlayColor="#DDDDDD"
-      onPress={() => onSelect(id)}
+      onPress={() =>
+        navigation.navigate('Job', {
+          id: id,
+          otherParam: 'anything you want here',
+        })
+      }
       style={[styles.item]}>
-      <View>
-        {place_from !== null && (
-          <Text>
-            {place_from} ➠ {place_to}
-          </Text>
+      <View style={styles.flexRow}>
+        {from !== null && (
+          <View style={[styles.flexColumn, {flex: 1}]}>
+            <Text style={styles.locationPickup}>{from}</Text>
+            <Text style={styles.locationDestination}>→ {to}</Text>
+          </View>
         )}
-        <Text>{bkkTime(reserved_at)}</Text>
+        <View style={[styles.flexColumn, {textAlign: 'right'}]}>
+          <Text style={[styles.txtPrimary, {alignSelf: 'flex-end'}]}>
+            {tmPrimary}
+          </Text>
+          <Text style={[styles.txtSecondary, {alignSelf: 'flex-end'}]}>
+            {tmSecondary}
+          </Text>
+        </View>
       </View>
     </TouchableHighlight>
   );
 }
+function itemProcess(data) {
+  if (!data) return [];
+  if (!data.items) return [];
+  return data.items.map(i => ({
+    ...i,
+    tmPrimary: relativeTime(i.reserved_at),
+    tmSecondary: displayTime(i.reserved_at),
+  }));
+}
 
-export default function AvailableJobs({userId}) {
+export default function AvailableJobs({navigation, userId}) {
+  let intval = React.useRef(null);
+  const [items, setItems] = React.useState([]);
   const [selected, setSelected] = React.useState(new Map());
   const {loading, error, data} = useSubscription(QUEUE_SUBSCRIPTION, {
     shouldResubscribe: true,
@@ -70,16 +93,30 @@ export default function AvailableJobs({userId}) {
     },
     [selected],
   );
+
+  React.useEffect(() => {
+    clearInterval(intval);
+    if (data && data.items.length > 0) {
+      setItems(itemProcess(data));
+      // need to force re-render time although no update data
+      intval = setInterval(() => {
+        setItems(itemProcess(data));
+      }, 5000);
+      return () => clearInterval(intval);
+    }
+  }, [data]);
+
   return (
     <>
       {loading && <ActivityIndicator />}
-      {error && <Text>{error}</Text>}
+      {error && <Text>{error.message}</Text>}
       {data && (
         <FlatList
-          data={data.items}
+          data={items}
           renderItem={({item}) => (
             <Item
               {...item}
+              navigation={navigation}
               selected={!selected.get(item.id)}
               onSelect={onSelect}
             />
@@ -97,12 +134,34 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   item: {
-    padding: 20,
-    marginHorizontal: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 8,
     borderBottomColor: '#ddd',
     borderBottomWidth: 0.5,
   },
   title: {
     fontSize: 32,
+  },
+  flexRow: {
+    flexDirection: 'row',
+    alignContent: 'space-between',
+  },
+  flexColumn: {
+    flexDirection: 'column',
+  },
+  locationPickup: {
+    fontSize: 24,
+  },
+  locationDestination: {
+    fontSize: 18,
+    color: '#888',
+  },
+  txtPrimary: {
+    fontSize: 22,
+    color: '#aaa',
+  },
+  txtSecondary: {
+    fontSize: 18,
+    color: '#666',
   },
 });

@@ -1,27 +1,49 @@
 import React from 'react';
 import {View, Text, Button, SafeAreaView, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {AuthContext} from '../App';
 import Default from './Default';
 import AvailableJobs from '../components/AvailableJobs';
+import Job from '../components/Job';
 
 const Tab = createBottomTabNavigator();
+const MainStack = createStackNavigator();
 
-export function IndexScreen({navigation}) {
+export function IndexScreen() {
   const {signOut} = React.useContext(AuthContext);
   return (
-    <SafeAreaView style={styles.container}>
+    <MainStack.Navigator
+      screenOptions={{
+        headerShown: true,
+      }}>
+      <MainStack.Screen
+        name="Upcoming queue"
+        component={AvailableJobs}
+        options={{
+          animationEnabled: true,
+        }}
+      />
+      <MainStack.Screen
+        name="Job"
+        component={Job}
+        options={{
+          animationEnabled: true,
+        }}
+      />
+    </MainStack.Navigator>
+  );
+}
+/*     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Available Jobs</Text>
       <AvailableJobs />
-      {/* <Button title="Sign out" onPress={signOut} />
+    <Button title="Sign out" onPress={signOut} />
       <Button
         title="Go to Jane's profile"
         onPress={() => navigation.navigate('Profile', {name: 'Jane'})}
-      /> */}
-    </SafeAreaView>
-  );
-}
+      />
+    </SafeAreaView>*/
 
 export default function HomeTabs() {
   return (
@@ -48,15 +70,3 @@ export default function HomeTabs() {
     </Tab.Navigator>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 0,
-  },
-  title: {
-    fontSize: 25,
-    color: "#444",
-    textAlign: "center"
-  }
-});

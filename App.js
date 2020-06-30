@@ -79,8 +79,6 @@ const App = () => {
         if (keys.includes('errors')) {
           AsyncStorage.clear();
         } else {
-          console.log(data);
-          console.log(data.token);
           AsyncStorage.setItem('userToken', data.token);
           AsyncStorage.setItem('userResp', JSON.stringify(data));
           dispatch({type: 'SIGN_IN', token: data.token});
@@ -96,7 +94,7 @@ const App = () => {
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
 
-        dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
+        dispatch({type: 'SIGN_IN', token: ''});
       },
     }),
     [],
@@ -125,11 +123,7 @@ const App = () => {
                 }}
               />
             ) : (
-              <Stack.Screen
-                name="Home"
-                component={HomeTabs}
-                // options={{title: 'Welcome'}}
-              />
+              <Stack.Screen name="Home" component={HomeTabs} />
             )}
           </Stack.Navigator>
         </NavigationContainer>
