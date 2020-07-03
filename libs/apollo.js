@@ -27,23 +27,20 @@ const wsLink = new WebSocketLink({
   },
 });
 
-let token;
+let userResp;
 const withToken = setContext(async request => {
-  let headers;
-  if (!token) {
+  if (!userResp) {
     const val = await AsyncStorage.getItem('userResp');
     let u = JSON.parse(val);
-    token = u.token;
-    headers = {
-      Authorization: `Bearer ${u.token}`,
-      'X-Hasura-User-Id': u.username,
-      'X-Hasura-Role': u.roles.length > 0 ? u.roles[0] : '',
-    };
-    return {headers};
+    userResp = u;
   }
-  return {
-    headers: {},
+  const {token, username, roles} = userResp;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    'X-Hasura-User-Id': username,
+    'X-Hasura-Role': roles.length > 0 ? roles[0] : '',
   };
+  return {headers};
 });
 
 const resetToken = onError(({networkError}) => {

@@ -89,13 +89,13 @@ function ItemDisplay(props) {
       isActive = false;
     } else if (picked_up_at !== null && dropped_off_at === null) {
       currStep = 'picked_up';
+    } else if (picked_up_at === null && dropped_off_at === null) {
+      currStep = 'start';
     }
   } else {
     if (tmPrimary === 'Passed') {
       // prevent doing anything at all if it's not your job
       currStep = '';
-    } else if (picked_up_at === null && dropped_off_at === null) {
-      currStep = 'start';
     }
   }
   console.log('CURRENT STEP: ', currStep);
@@ -116,7 +116,7 @@ function ItemDisplay(props) {
           <Text style={{color: 'white'}}>ACTIVE</Text>
         </View>
       )}
-      {!isActive && (
+      {!isActive && currStep !== 'available' && (
         <View
           style={{
             height: 30,

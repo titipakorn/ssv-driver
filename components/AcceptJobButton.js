@@ -18,6 +18,7 @@ const ACCEPT_JOB_MUTATION = gql`
 `;
 
 export default function AccepJobButton({jobID, userID}) {
+  const [processing, setProcessing] = React.useState(false);
   const [accept_job, {loading, error}] = useMutation(ACCEPT_JOB_MUTATION);
   // refetch should not be ncessary since it's subscription thing
   let buttontext = (
@@ -46,6 +47,15 @@ export default function AccepJobButton({jobID, userID}) {
       </Text>
     );
   }
+
+  React.useEffect(() => {
+    if (!loading && processing) {
+      setTimeout(() => {
+        setProcessing(false);
+      }, 300);
+    }
+  }, [loading]);
+
   return (
     <TouchableOpacity
       style={{
@@ -54,7 +64,7 @@ export default function AccepJobButton({jobID, userID}) {
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      disabled={loading}
+      disabled={processing || loading || error}
       onPress={() => {
         const variables = {
           jobID,

@@ -9,9 +9,6 @@ const DROPOFF_TASK_MUTATION = gql`
       affected_rows
       returning {
         id
-        driver {
-          username
-        }
         dropped_off_at
       }
     }
@@ -19,6 +16,7 @@ const DROPOFF_TASK_MUTATION = gql`
 `;
 
 export default function DropoffButton({jobID}) {
+  const [processing, setProcessing] = React.useState(false);
   const [dropoff, {loading, error}] = useMutation(DROPOFF_TASK_MUTATION);
   // refetch should not be ncessary since it's subscription thing
   let buttontext = (
@@ -47,6 +45,14 @@ export default function DropoffButton({jobID}) {
       </Text>
     );
   }
+  React.useEffect(() => {
+    if (!loading && processing) {
+      setTimeout(() => {
+        setProcessing(false);
+      }, 300);
+    }
+  }, [loading]);
+
   return (
     <TouchableOpacity
       style={{
@@ -55,7 +61,7 @@ export default function DropoffButton({jobID}) {
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      disabled={loading}
+      disabled={processing || loading || error}
       onPress={() => {
         const variables = {
           jobID,

@@ -16,6 +16,7 @@ const PICKUP_TASK_MUTATION = gql`
 `;
 
 export default function PickupButton({jobID}) {
+  const [processing, setProcessing] = React.useState(false);
   const [pickup, {loading, error}] = useMutation(PICKUP_TASK_MUTATION);
   // refetch should not be ncessary since it's subscription thing
   let buttontext = (
@@ -44,6 +45,15 @@ export default function PickupButton({jobID}) {
       </Text>
     );
   }
+
+  React.useEffect(() => {
+    if (!loading && processing) {
+      setTimeout(() => {
+        setProcessing(false);
+      }, 300);
+    }
+  }, [loading]);
+
   return (
     <TouchableOpacity
       style={{
@@ -52,8 +62,9 @@ export default function PickupButton({jobID}) {
         justifyContent: 'center',
         alignItems: 'center',
       }}
-      disabled={loading}
+      disabled={processing || loading || error}
       onPress={() => {
+        setProcessing(true);
         const variables = {
           jobID,
           now: new Date(),
