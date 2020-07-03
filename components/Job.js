@@ -171,7 +171,21 @@ function ItemDisplay(props) {
           />
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => Alert.alert('Button with adjusted color pressed')}>
+          onPress={() =>
+            Alert.alert(
+              'Alert Title',
+              'My Alert Msg',
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => console.log('Cancel Pressed'),
+                  style: 'cancel',
+                },
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ],
+              {cancelable: false},
+            )
+          }>
           <Image
             style={styles.button}
             source={require('../static/phone.png')}

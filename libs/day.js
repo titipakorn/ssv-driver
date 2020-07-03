@@ -18,3 +18,9 @@ export const relativeTime = dayStr => {
   const hr = min / 60;
   return `${hr.toFixed(0)}:${(min % 60).toFixed(0)} hr`;
 };
+export const displayDatetime = dayStr =>
+  dayjs(dayStr).format('MMMM DD, YYYY HH:mm');
+export const minDuration = (d1, d2) => {
+  const diff = (dayjs(d2) - dayjs(d1)) / 1000;
+  return diff / 60; // min
+};

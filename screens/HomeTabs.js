@@ -7,12 +7,13 @@ import {AuthContext} from '../App';
 import Default from './Default';
 import AvailableJobs from '../components/AvailableJobs';
 import Job from '../components/Job';
+import JobHistory from '../components/JobHistory';
 
 const Tab = createBottomTabNavigator();
 const MainStack = createStackNavigator();
 
 export function IndexScreen() {
-  const {signOut} = React.useContext(AuthContext);
+  // const {signOut} = React.useContext(AuthContext);
   return (
     <MainStack.Navigator
       screenOptions={{
@@ -56,6 +57,8 @@ export default function HomeTabs() {
             iconName = focused ? 'ios-car' : 'ios-filing';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'ios-contact' : 'ios-contact';
+          } else if (route.name === 'History') {
+            iconName = focused ? 'ios-list' : 'ios-list';
           }
           // You can return any component that you like here!
           return <Icon name={iconName} size={size} color={color} />;
@@ -66,6 +69,7 @@ export default function HomeTabs() {
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="Home" component={IndexScreen} />
+      <Tab.Screen name="History" component={JobHistory} />
       <Tab.Screen name="Profile" component={Default} />
     </Tab.Navigator>
   );
