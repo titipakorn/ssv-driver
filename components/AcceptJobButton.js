@@ -4,14 +4,22 @@ import gql from 'graphql-tag';
 import {useMutation} from '@apollo/react-hooks';
 
 const ACCEPT_JOB_MUTATION = gql`
-  mutation ACCEPT_JOB_MUTATION($jobID: smallint, $userID: uuid) {
-    update_trip(where: {id: {_eq: $jobID}}, _set: {driver_id: $userID}) {
+  mutation ACCEPT_JOB_MUTATION(
+    $jobID: smallint
+    $userID: uuid
+    $now: timestamptz
+  ) {
+    update_trip(
+      where: {id: {_eq: $jobID}}
+      _set: {driver_id: $userID, accepted_at: $now}
+    ) {
       affected_rows
       returning {
         id
         driver {
           username
         }
+        accepted_at
       }
     }
   }
@@ -69,6 +77,7 @@ export default function AccepJobButton({jobID, userID}) {
         const variables = {
           jobID,
           userID,
+          now: new Date(),
         };
         console.log('press: accepting job', variables);
         accept_job({

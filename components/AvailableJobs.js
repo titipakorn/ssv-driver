@@ -30,12 +30,26 @@ const QUEUE_SUBSCRIPTION = gql`
       is_advanced_reservation
       reserved_at
       picked_up_at
+      cancelled_at
     }
   }
 `;
 
 function Item(row) {
-  const {navigation, id, from, to, tmPrimary, tmSecondary, onSelect} = row;
+  const {
+    navigation,
+    id,
+    from,
+    to,
+    tmPrimary,
+    tmSecondary,
+    cancelled_at,
+    onSelect,
+  } = row;
+  let relTime = tmPrimary;
+  if (cancelled_at !== null) {
+    relTime = 'Cancelled';
+  }
   return (
     <TouchableHighlight
       activeOpacity={0.8}
@@ -56,7 +70,7 @@ function Item(row) {
         )}
         <View style={[styles.flexColumn, {textAlign: 'right'}]}>
           <Text style={[styles.txtPrimary, {alignSelf: 'flex-end'}]}>
-            {tmPrimary}
+            {relTime}
           </Text>
           <Text style={[styles.txtSecondary, {alignSelf: 'flex-end'}]}>
             {tmSecondary}

@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
+import Geolocation from '@react-native-community/geolocation';
 import {useSubscription} from '@apollo/react-hooks';
-import MapView from 'react-native-maps';
+import MapView, {Marker} from 'react-native-maps';
 import {relativeTime, displayTime} from '../libs/day';
 import AcceptJobButton from './AcceptJobButton';
 import PickupButton from './PickupButton';
@@ -35,6 +36,7 @@ const JOB_SUBSCRIPTION = gql`
       reserved_at
       picked_up_at
       dropped_off_at
+      cancelled_at
     }
   }
 `;
@@ -46,9 +48,10 @@ function ItemDisplay(props) {
     to,
     user,
     driver,
-    reserved_at,
+    accepted_at,
     picked_up_at,
     dropped_off_at,
+    cancelled_at,
     tmPrimary,
     tmSecondary,
   } = props.item;
@@ -83,7 +86,10 @@ function ItemDisplay(props) {
   if (isYourJob) {
     isActive = true;
     // console.log('pick/drop', picked_up_at, dropped_off_at);
-    if (picked_up_at !== null && dropped_off_at !== null) {
+    if (cancelled_at !== null) {
+      currStep = 'cancelled';
+      isActive = false;
+    } else if (picked_up_at !== null && dropped_off_at !== null) {
       // TODO: add no feedback critiria
       currStep = 'dropped_off';
       isActive = false;
@@ -98,7 +104,10 @@ function ItemDisplay(props) {
       currStep = '';
     }
   }
-  console.log('CURRENT STEP: ', currStep);
+  let relTime = `${tmPrimary !== 'Passed' ? 'In ' : ''} ${tmPrimary}`;
+  if (cancelled_at !== null) {
+    relTime = 'Cancelled';
+  }
   return (
     <View
       style={{
@@ -116,7 +125,7 @@ function ItemDisplay(props) {
           <Text style={{color: 'white'}}>ACTIVE</Text>
         </View>
       )}
-      {!isActive && currStep !== 'available' && (
+      {!isActive && (
         <View
           style={{
             height: 30,
@@ -134,7 +143,7 @@ function ItemDisplay(props) {
             {textAlign: 'right', justifyContent: 'space-between'},
           ]}>
           <Text style={[styles.txtPrimary, {alignSelf: 'flex-end'}]}>
-            In {tmPrimary}
+            {relTime}
           </Text>
           <Text style={[styles.txtSecondary, {alignSelf: 'flex-end'}]}>
             At {tmSecondary}
@@ -193,7 +202,7 @@ function ItemDisplay(props) {
         </TouchableOpacity>
       </View>
       {/* can start job only now and future job */}
-      {currStep === 'available' && (
+      {currStep === 'available' && cancelled_at === null && (
         <AcceptJobButton jobID={id} userID={userID} />
       )}
       {currStep === 'start' && <PickupButton jobID={id} />}
@@ -212,9 +221,18 @@ function process(data) {
   };
 }
 
-export default function Job({navigation, route}) {
+export default function Job({route}) {
   let intval = React.useRef(null);
+  let watchID = React.useRef(null);
   const {id} = route.params;
+  const [geo, setGeo] = React.useState({
+    initialPosition: 'unknown',
+    lastPosition: 'unknown',
+  });
+  const [pins, setPins] = React.useState({
+    origin: {},
+    destination: {},
+  });
   const [userData, setUserData] = React.useState({});
   const [item, setItem] = React.useState({});
   const {loading, error, data} = useSubscription(JOB_SUBSCRIPTION, {
@@ -232,15 +250,52 @@ export default function Job({navigation, route}) {
       } catch (e) {
         // Restoring token failed
       }
-    };
 
+      Geolocation.getCurrentPosition(
+        position => {
+          const initialPosition = position;
+          setGeo({initialPosition, lastPosition: initialPosition});
+        },
+        error => {
+          console.log('error: ', JSON.stringify(error));
+          // Alert.alert('Error', JSON.stringify(error))
+        },
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
+      );
+      this.watchID = Geolocation.watchPosition(position => {
+        const lastPosition = position;
+        console.log('last position: ', typeof lastPosition, lastPosition);
+        setGeo({...geo, lastPosition});
+      });
+    };
     bootstrapAsync();
+
+    return () => {
+      if (watchID != null) {
+        Geolocation.clearWatch(watchID);
+      }
+    };
   }, []);
 
   React.useEffect(() => {
     clearInterval(intval);
     if (data && data.items.length > 0) {
       setItem(process(data));
+      const c = data.items[0];
+      const o = c.place_from || {coordinates: [0, 0]};
+      const d = c.place_to || {coordinates: [0, 0]};
+      setPins({
+        origin: {
+          latitude: o.coordinates[1],
+          longitude: o.coordinates[0],
+          title: c.from,
+        },
+        destination: {
+          latitude: d.coordinates[1],
+          longitude: d.coordinates[0],
+          title: c.to,
+        },
+      });
       // need to force re-render time although no update data
       intval = setInterval(() => {
         setItem(process(data));
@@ -257,8 +312,30 @@ export default function Job({navigation, route}) {
           longitude: 100.5706,
           latitudeDelta: 0.0122,
           longitudeDelta: 0.0121,
-        }}
-      />
+        }}>
+        {Object.keys(pins).map(k => {
+          if (pins[k].latitude) {
+            return (
+              <Marker
+                key={`p-${k}`}
+                pinColor={k === 'origin' ? 'red' : 'green'}
+                title={pins[k].title}
+                description={k}
+                coordinate={pins[k]}
+              />
+            );
+          }
+        })}
+        {geo.lastPosition !== 'unknown' && (
+          <Marker
+            key={'pin-you'}
+            title={'You'}
+            pinColor={'blue'}
+            description={'Your current position'}
+            coordinate={geo.lastPosition.coords}
+          />
+        )}
+      </MapView>
       {loading && <ActivityIndicator />}
       {error && <Text>{error.message}</Text>}
       {item && (
