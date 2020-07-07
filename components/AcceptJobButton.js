@@ -26,6 +26,7 @@ const ACCEPT_JOB_MUTATION = gql`
 `;
 
 export default function AccepJobButton({jobID, userID}) {
+  let handler = React.useRef(null);
   const [processing, setProcessing] = React.useState(false);
   const [accept_job, {loading, error}] = useMutation(ACCEPT_JOB_MUTATION);
   // refetch should not be ncessary since it's subscription thing
@@ -57,11 +58,13 @@ export default function AccepJobButton({jobID, userID}) {
   }
 
   React.useEffect(() => {
+    if (handler) clearTimeout(handler);
     if (!loading && processing) {
-      setTimeout(() => {
+      handler = setTimeout(() => {
         setProcessing(false);
       }, 300);
     }
+    return () => clearTimeout(handler);
   }, [loading]);
 
   return (
@@ -79,19 +82,16 @@ export default function AccepJobButton({jobID, userID}) {
           userID,
           now: new Date(),
         };
-        console.log('press: accepting job', variables);
+        // console.log('press: accepting job', variables);
         accept_job({
           variables,
         })
           .then(res => {
-            console.log('done: accepting job', res);
-            console.log(res.data.update_trip.returning);
+            // console.log('done: accepting job', res);
+            // console.log(res.data.update_trip.returning);
           })
           .catch(err => {
-            console.log('err: ', err);
-          })
-          .finally(() => {
-            console.log('finally');
+            // console.log('err: ', err);
           });
       }}>
       {buttontext}

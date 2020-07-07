@@ -26,3 +26,4 @@ export const minDuration = (d1, d2) => {
   const diff = (dayjs(d2) - dayjs(d1)) / 1000;
   return Math.floor(diff / 60); // min
 };
+export const getToday = () => dayjs().subtract(3, 'hour').format('YYYY-MM-DDTHH:mm:ssZ');

@@ -10,13 +10,14 @@ import {
 } from 'react-native';
 import gql from 'graphql-tag';
 import {useSubscription} from '@apollo/react-hooks';
-import {relativeTime, displayTime} from '../libs/day';
+import {relativeTime, displayTime, getToday} from '../libs/day';
 
 const QUEUE_SUBSCRIPTION = gql`
-  subscription QUEUE_SUBSCRIPTION($userId: uuid) {
+  subscription QUEUE_SUBSCRIPTION($userId: uuid, $day: timestamptz) {
     items: trip(
       where: {
         dropped_off_at: {_is_null: true}
+        reserved_at: {_gte: $day}
         _or: [{driver_id: null}, {driver_id: {_eq: $userId}}]
       }
       order_by: {reserved_at: desc}
@@ -27,7 +28,6 @@ const QUEUE_SUBSCRIPTION = gql`
       user {
         username
       }
-      is_advanced_reservation
       reserved_at
       picked_up_at
       cancelled_at
@@ -36,16 +36,7 @@ const QUEUE_SUBSCRIPTION = gql`
 `;
 
 function Item(row) {
-  const {
-    navigation,
-    id,
-    from,
-    to,
-    tmPrimary,
-    tmSecondary,
-    cancelled_at,
-    onSelect,
-  } = row;
+  const {navigation, id, from, to, tmPrimary, tmSecondary, cancelled_at} = row;
   let relTime = tmPrimary;
   if (cancelled_at !== null) {
     relTime = 'Cancelled';
@@ -96,9 +87,9 @@ export default function AvailableJobs({navigation, userId}) {
   const [selected, setSelected] = React.useState(new Map());
   const {loading, error, data} = useSubscription(QUEUE_SUBSCRIPTION, {
     shouldResubscribe: true,
-    variables: {userId: userId},
+    variables: {userId: userId, day: getToday()},
   });
-  const onSelect = React.useCallback(
+  /* const onSelect = React.useCallback(
     id => {
       const newSelected = new Map(selected);
       newSelected.set(id, !selected.get(id));
@@ -106,7 +97,7 @@ export default function AvailableJobs({navigation, userId}) {
       setSelected(newSelected);
     },
     [selected],
-  );
+  ); */
 
   React.useEffect(() => {
     clearInterval(intval);
@@ -132,10 +123,15 @@ export default function AvailableJobs({navigation, userId}) {
               {...item}
               navigation={navigation}
               selected={!selected.get(item.id)}
-              onSelect={onSelect}
+              // onSelect={onSelect}
             />
           )}
           keyExtractor={item => `${item.id}`}
+          ListEmptyComponent={() => (
+            <Text style={{textAlign: 'center', paddingVertical: 20}}>
+              No job at the moment, Yay!
+            </Text>
+          )}
         />
       )}
     </>

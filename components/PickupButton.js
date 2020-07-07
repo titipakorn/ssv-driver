@@ -16,6 +16,7 @@ const PICKUP_TASK_MUTATION = gql`
 `;
 
 export default function PickupButton({jobID}) {
+  let handler = React.useRef(null);
   const [processing, setProcessing] = React.useState(false);
   const [pickup, {loading, error}] = useMutation(PICKUP_TASK_MUTATION);
   // refetch should not be ncessary since it's subscription thing
@@ -47,11 +48,13 @@ export default function PickupButton({jobID}) {
   }
 
   React.useEffect(() => {
+    if (handler) clearTimeout(handler);
     if (!loading && processing) {
-      setTimeout(() => {
+      handler = setTimeout(() => {
         setProcessing(false);
       }, 300);
     }
+    return () => clearTimeout(handler);
   }, [loading]);
 
   return (
@@ -69,19 +72,15 @@ export default function PickupButton({jobID}) {
           jobID,
           now: new Date(),
         };
-        console.log('press: accepting job', variables);
         pickup({
           variables,
         })
           .then(res => {
-            console.log('done: accepting job', res);
-            console.log(res.data.update_trip.returning);
+            // console.log('done: accepting job', res);
+            // console.log(res.data.update_trip.returning);
           })
           .catch(err => {
-            console.log('err: ', err);
-          })
-          .finally(() => {
-            console.log('finally');
+            // console.log('err: ', err);
           });
       }}>
       {buttontext}

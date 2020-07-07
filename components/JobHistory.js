@@ -32,6 +32,7 @@ const JOB_HISTORY_QUERY = gql`
       }
       is_advanced_reservation
       reserved_at
+      accepted_at
       picked_up_at
       dropped_off_at
     }
@@ -39,8 +40,15 @@ const JOB_HISTORY_QUERY = gql`
 `;
 
 function Item(row) {
-  const {from, to, reserved_at, picked_up_at, dropped_off_at} = row;
-  const duration = minDuration(picked_up_at, dropped_off_at);
+  const {
+    from,
+    to,
+    reserved_at,
+    accepted_at,
+    picked_up_at,
+    dropped_off_at,
+  } = row;
+  const duration = minDuration(accepted_at || picked_up_at, dropped_off_at);
   return (
     <TouchableHighlight
       activeOpacity={0.8}

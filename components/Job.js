@@ -18,6 +18,7 @@ import AcceptJobButton from './AcceptJobButton';
 import PickupButton from './PickupButton';
 import DropoffButton from './DropoffButton';
 import FeedbackButton from './FeedbackButton';
+import StopWatch from './Stopwatch';
 
 const JOB_SUBSCRIPTION = gql`
   subscription JOB_SUBSCRIPTION($id: smallint) {
@@ -34,6 +35,7 @@ const JOB_SUBSCRIPTION = gql`
         id
       }
       reserved_at
+      accepted_at
       picked_up_at
       dropped_off_at
       cancelled_at
@@ -122,7 +124,9 @@ function ItemDisplay(props) {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{color: 'white'}}>ACTIVE</Text>
+          <Text style={{color: 'white'}}>
+            ACTIVE <StopWatch startTime={accepted_at} />
+          </Text>
         </View>
       )}
       {!isActive && (
