@@ -113,7 +113,7 @@ export default function AvailableJobs({navigation, userId}) {
 
   return (
     <>
-      {loading && <ActivityIndicator />}
+      {loading && <ActivityIndicator style={{marginVertical: 20}} />}
       {error && <Text>{error.message}</Text>}
       {data && (
         <FlatList

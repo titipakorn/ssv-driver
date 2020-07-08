@@ -10,15 +10,14 @@ import {
 } from 'react-native';
 import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
-import Geolocation from '@react-native-community/geolocation';
 import {useSubscription} from '@apollo/react-hooks';
-import MapView, {Marker} from 'react-native-maps';
 import {relativeTime, displayTime} from '../libs/day';
 import AcceptJobButton from './AcceptJobButton';
 import PickupButton from './PickupButton';
 import DropoffButton from './DropoffButton';
 import FeedbackButton from './FeedbackButton';
-import StopWatch from './Stopwatch';
+import StopWatch from './StopWatch';
+import Map from './Map';
 
 const JOB_SUBSCRIPTION = gql`
   subscription JOB_SUBSCRIPTION($id: smallint) {
@@ -227,12 +226,7 @@ function process(data) {
 
 export default function Job({route}) {
   let intval = React.useRef(null);
-  let watchID = React.useRef(null);
   const {id} = route.params;
-  const [geo, setGeo] = React.useState({
-    initialPosition: 'unknown',
-    lastPosition: 'unknown',
-  });
   const [pins, setPins] = React.useState({
     origin: {},
     destination: {},
@@ -254,31 +248,8 @@ export default function Job({route}) {
       } catch (e) {
         // Restoring token failed
       }
-
-      Geolocation.getCurrentPosition(
-        position => {
-          const initialPosition = position;
-          setGeo({initialPosition, lastPosition: initialPosition});
-        },
-        error => {
-          console.log('error: ', JSON.stringify(error));
-          // Alert.alert('Error', JSON.stringify(error))
-        },
-        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
-      );
-      this.watchID = Geolocation.watchPosition(position => {
-        const lastPosition = position;
-        console.log('last position: ', typeof lastPosition, lastPosition);
-        setGeo({...geo, lastPosition});
-      });
     };
     bootstrapAsync();
-
-    return () => {
-      if (watchID != null) {
-        Geolocation.clearWatch(watchID);
-      }
-    };
   }, []);
 
   React.useEffect(() => {
@@ -307,39 +278,10 @@ export default function Job({route}) {
       return () => clearInterval(intval);
     }
   }, [data]);
+
   return (
     <>
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 13.7385,
-          longitude: 100.5706,
-          latitudeDelta: 0.0122,
-          longitudeDelta: 0.0121,
-        }}>
-        {Object.keys(pins).map(k => {
-          if (pins[k].latitude) {
-            return (
-              <Marker
-                key={`p-${k}`}
-                pinColor={k === 'origin' ? 'red' : 'green'}
-                title={pins[k].title}
-                description={k}
-                coordinate={pins[k]}
-              />
-            );
-          }
-        })}
-        {geo.lastPosition !== 'unknown' && (
-          <Marker
-            key={'pin-you'}
-            title={'You'}
-            pinColor={'blue'}
-            description={'Your current position'}
-            coordinate={geo.lastPosition.coords}
-          />
-        )}
-      </MapView>
+      <Map pins={pins} />
       {loading && <ActivityIndicator />}
       {error && <Text>{error.message}</Text>}
       {item && (
