@@ -84,7 +84,7 @@ function itemProcess(data) {
 export default function AvailableJobs({navigation, userId}) {
   let intval = React.useRef(null);
   const [items, setItems] = React.useState([]);
-  const [selected, setSelected] = React.useState(new Map());
+  // const [selected, setSelected] = React.useState(new Map());
   const {loading, error, data} = useSubscription(QUEUE_SUBSCRIPTION, {
     shouldResubscribe: true,
     variables: {userId: userId, day: getToday()},
@@ -113,27 +113,25 @@ export default function AvailableJobs({navigation, userId}) {
 
   return (
     <>
-      {loading && <ActivityIndicator style={{marginVertical: 20}} />}
       {error && <Text>{error.message}</Text>}
-      {data && (
-        <FlatList
-          data={items}
-          renderItem={({item}) => (
-            <Item
-              {...item}
-              navigation={navigation}
-              selected={!selected.get(item.id)}
-              // onSelect={onSelect}
-            />
-          )}
-          keyExtractor={item => `${item.id}`}
-          ListEmptyComponent={() => (
-            <Text style={{textAlign: 'center', paddingVertical: 20}}>
-              No job at the moment, Yay!
-            </Text>
-          )}
-        />
-      )}
+      <FlatList
+        data={items}
+        renderItem={({item}) => (
+          <Item
+            {...item}
+            navigation={navigation}
+            // selected={!selected.get(item.id)}
+            // onSelect={onSelect}
+          />
+        )}
+        keyExtractor={item => `${item.id}`}
+        ListEmptyComponent={() => (
+          <Text style={{textAlign: 'center', paddingVertical: 20}}>
+            No job at the moment, Yay!
+          </Text>
+        )}
+      />
+      {loading && <ActivityIndicator style={{marginVertical: 20}} />}
     </>
   );
 }

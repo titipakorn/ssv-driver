@@ -47,6 +47,7 @@ function ItemDisplay(props) {
     id,
     from,
     to,
+    step,
     user,
     driver,
     accepted_at,
@@ -61,50 +62,15 @@ function ItemDisplay(props) {
     return <ActivityIndicator />;
   }
   const isYourJob = driver ? userID == driver.id : false;
-  /* Step to complete stuffs
-  1. [available] Unacquire job (driver.id == null)
-  2. [start] Start working on job
-    * driver.id == userID
-    * reserved_at --> future
-    * picked_up, dropped_off == null
-  3. [picked_up] Picked UP customer
-    * driver.id == userID
-    * reserved_at - passed
-    * picked_up -- assigned
-    * dropped_off == null
-  4. [dropped_off] Dropped Off customer
-    * driver.id == userID
-    * reserved_at - passed
-    * picked_up -- assigned
-    * dropped_off -- assigned
-  5. [feedback] Feedback
-    * all & rated
-    ~ TODO: Don't have a clue yet.
+  /* STEP:
+    1. wait
+    2. accept
+    3. onboard
+    4. done
   */
-  let currStep = 'available';
-  let isActive = false;
-  // console.log('isYourJob', isYourJob, driver)
-  if (isYourJob) {
-    isActive = true;
-    // console.log('pick/drop', picked_up_at, dropped_off_at);
-    if (cancelled_at !== null) {
-      currStep = 'cancelled';
-      isActive = false;
-    } else if (picked_up_at !== null && dropped_off_at !== null) {
-      // TODO: add no feedback critiria
-      currStep = 'dropped_off';
-      isActive = false;
-    } else if (picked_up_at !== null && dropped_off_at === null) {
-      currStep = 'picked_up';
-    } else if (picked_up_at === null && dropped_off_at === null) {
-      currStep = 'start';
-    }
-  } else {
-    if (tmPrimary === 'Passed') {
-      // prevent doing anything at all if it's not your job
-      currStep = '';
-    }
-  }
+  const isActiveStep = ['accept', 'onboard'].includes(step);
+  let isActive = isYourJob || isActiveStep;
+  const currStep = isYourJob ? step : tmPrimary === 'Passed' ? 'passed' : step;
   let relTime = `${tmPrimary !== 'Passed' ? 'In ' : ''} ${tmPrimary}`;
   if (cancelled_at !== null) {
     relTime = 'Cancelled';
@@ -115,7 +81,7 @@ function ItemDisplay(props) {
         flex: 1,
         justifyContent: 'space-between',
       }}>
-      {isActive && (
+      {isActive && isActiveStep && (
         <View
           style={{
             height: 30,
@@ -205,22 +171,41 @@ function ItemDisplay(props) {
         </TouchableOpacity>
       </View>
       {/* can start job only now and future job */}
-      {currStep === 'available' && cancelled_at === null && (
+      {currStep === 'wait' && cancelled_at === null && (
         <AcceptJobButton jobID={id} userID={userID} />
       )}
-      {currStep === 'start' && <PickupButton jobID={id} />}
-      {currStep === 'picked_up' && <DropoffButton jobID={id} />}
-      {currStep === 'dropped_off' && <FeedbackButton jobID={id} />}
+      {isYourJob && (
+        <>
+          {currStep === 'accept' && <PickupButton jobID={id} />}
+          {currStep === 'onboard' && <DropoffButton jobID={id} />}
+          {currStep === 'done' && <FeedbackButton jobID={id} />}
+        </>
+      )}
     </View>
   );
 }
 
 function process(data) {
   const o = data.items[0];
+  /* STEP:
+    1. wait
+    2. accept
+    3. onboard
+    4. done
+  */
+  let step = 'wait';
+  if (o.dropped_off_at != null) {
+    step = 'done';
+  } else if (o.picked_up_at !== null) {
+    step = 'onboard';
+  } else if (o.accepted_at !== null) {
+    step = 'accept';
+  }
   return {
     ...o,
     tmPrimary: relativeTime(o.reserved_at),
     tmSecondary: displayTime(o.reserved_at),
+    step,
   };
 }
 
