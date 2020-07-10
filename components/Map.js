@@ -4,9 +4,10 @@ import Geolocation from '@react-native-community/geolocation';
 import MapView, {Marker} from 'react-native-maps';
 import bbox from '@turf/bbox';
 import {lineString} from '@turf/helpers';
+import TraceLogger from './TraceLogger';
 
 function pushGeoPosition2Logger(position) {
-  console.log('2logger:', position);
+  // console.log('2logger:', position);
 }
 
 function mapbound(curr, ODpins) {
@@ -31,13 +32,6 @@ function mapbound(curr, ODpins) {
   const mbox = bbox(line);
   const latDelta = mbox[3] - mbox[1];
   const lonDelta = mbox[2] - mbox[0];
-  region = {
-    latitude: (mbox[3] + mbox[1]) / 2,
-    longitude: (mbox[2] + mbox[0]) / 2,
-    latitudeDelta: latDelta * 1.5,
-    longitudeDelta: lonDelta * 1.5,
-  };
-  return region;
   /*
   type Region {
     latitude: Number,
@@ -46,10 +40,16 @@ function mapbound(curr, ODpins) {
     longitudeDelta: Number,
   }
   */
-  return null;
+  region = {
+    latitude: (mbox[3] + mbox[1]) / 2,
+    longitude: (mbox[2] + mbox[0]) / 2,
+    latitudeDelta: latDelta * 1.5,
+    longitudeDelta: lonDelta * 1.5,
+  };
+  return region;
 }
 
-export default function Map(props) {
+export default function Map({pins, trip}) {
   let mapHandler = React.useRef(null);
   let watchID = React.useRef(null);
   const [region, setRegion] = React.useState({
@@ -63,7 +63,7 @@ export default function Map(props) {
     initialPosition: 'unknown',
     lastPosition: 'unknown',
   });
-  const {pins} = props;
+  // const {pins, trip} = props;
 
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -130,6 +130,11 @@ export default function Map(props) {
           coordinate={geo.lastPosition.coords}
         />
       )}
+      <TraceLogger
+        tripID={trip.id}
+        tripState={trip.step}
+        position={geo.lastPosition}
+      />
     </MapView>
   );
 }

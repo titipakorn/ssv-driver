@@ -4,7 +4,6 @@ import {
   FlatList,
   StyleSheet,
   TouchableHighlight,
-  TouchableOpacity,
   Text,
   View,
 } from 'react-native';
@@ -16,9 +15,11 @@ const QUEUE_SUBSCRIPTION = gql`
   subscription QUEUE_SUBSCRIPTION($userId: uuid, $day: timestamptz) {
     items: trip(
       where: {
-        dropped_off_at: {_is_null: true}
-        reserved_at: {_gte: $day}
-        _or: [{driver_id: null}, {driver_id: {_eq: $userId}}]
+        _and: [
+          {dropped_off_at: {_is_null: true}}
+          {reserved_at: {_gte: $day}}
+          {_or: [{driver_id: null}, {driver_id: {_eq: $userId}}]}
+        ]
       }
       order_by: {reserved_at: desc}
     ) {
@@ -40,6 +41,8 @@ function Item(row) {
   let relTime = tmPrimary;
   if (cancelled_at !== null) {
     relTime = 'Cancelled';
+  } else if (relTime == 'Passed') {
+    relTime = 'Anytime now'
   }
   return (
     <TouchableHighlight

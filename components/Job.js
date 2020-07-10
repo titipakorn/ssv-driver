@@ -61,7 +61,10 @@ function ItemDisplay(props) {
   if (!userID) {
     return <ActivityIndicator />;
   }
-  const isYourJob = driver ? userID == driver.id : false;
+  let isYourJob = true
+  if (driver && userID != driver.id) {
+    isYourJob = false
+  }
   /* STEP:
     1. wait
     2. accept
@@ -70,11 +73,17 @@ function ItemDisplay(props) {
   */
   const isActiveStep = ['accept', 'onboard'].includes(step);
   let isActive = isYourJob || isActiveStep;
-  const currStep = isYourJob ? step : tmPrimary === 'Passed' ? 'passed' : step;
+  let currStep = step
   let relTime = `${tmPrimary !== 'Passed' ? 'In ' : ''} ${tmPrimary}`;
+  currStep = isYourJob ? step : tmPrimary === 'Passed' ? 'passed' : step;
   if (cancelled_at !== null) {
     relTime = 'Cancelled';
   }
+  // if (step == "wait" && tmPrimary === 'Passed') {
+  //   // still active, but past pickup time -- no driver available or something
+  //   currStep =
+  // } else {
+  // }
   return (
     <View
       style={{
@@ -266,7 +275,7 @@ export default function Job({route}) {
 
   return (
     <>
-      <Map pins={pins} />
+      <Map pins={pins} trip={item} />
       {loading && <ActivityIndicator />}
       {error && <Text>{error.message}</Text>}
       {item && (

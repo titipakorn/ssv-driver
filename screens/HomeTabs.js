@@ -20,7 +20,7 @@ export function IndexScreen() {
         headerShown: true,
       }}>
       <MainStack.Screen
-        name="Upcoming queue"
+        name="Job queue"
         component={AvailableJobs}
         options={{
           animationEnabled: true,
