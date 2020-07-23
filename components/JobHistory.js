@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import gql from 'graphql-tag';
 import {useQuery} from '@apollo/react-hooks';
+import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {displayDatetime, minDuration} from '../libs/day';
 
@@ -88,12 +89,27 @@ function Item(row) {
   );
 }
 
-export default function JobHistory({navigation, userId}) {
+export default function JobHistory({navigation}) {
   const [selected, setSelected] = React.useState(new Map());
+  const [user, setUser] = React.useState(null);
   const {loading, error, data} = useQuery(JOB_HISTORY_QUERY, {
-    shouldResubscribe: true,
-    variables: {userId: userId},
+    skip: user == null,
+    variables: {userId: user ? user.id : null},
   });
+
+  React.useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      try {
+        const userTxt = await AsyncStorage.getItem('userResp');
+        const userJSON = JSON.parse(userTxt);
+        setUser(userJSON);
+      } catch (e) {
+        // Restoring token failed
+      }
+    };
+    if (user === null) bootstrapAsync();
+  }, []);
 
   const onSelect = React.useCallback(
     id => {

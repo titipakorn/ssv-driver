@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import gql from 'graphql-tag';
+import AsyncStorage from '@react-native-community/async-storage';
 import {useSubscription} from '@apollo/react-hooks';
 import {relativeTime, displayTime, getToday} from '../libs/day';
 
@@ -42,7 +43,7 @@ function Item(row) {
   if (cancelled_at !== null) {
     relTime = 'Cancelled';
   } else if (relTime == 'Passed') {
-    relTime = 'Anytime now'
+    relTime = 'Anytime now';
   }
   return (
     <TouchableHighlight
@@ -84,13 +85,15 @@ function itemProcess(data) {
   }));
 }
 
-export default function AvailableJobs({navigation, userId}) {
+export default function AvailableJobs({navigation}) {
   let intval = React.useRef(null);
+  const [user, setUser] = React.useState(null);
   const [items, setItems] = React.useState([]);
   // const [selected, setSelected] = React.useState(new Map());
   const {loading, error, data} = useSubscription(QUEUE_SUBSCRIPTION, {
     shouldResubscribe: true,
-    variables: {userId: userId, day: getToday()},
+    skip: user == null,
+    variables: {userId: user ? user.id : null, day: getToday()},
   });
   /* const onSelect = React.useCallback(
     id => {
@@ -101,6 +104,20 @@ export default function AvailableJobs({navigation, userId}) {
     },
     [selected],
   ); */
+
+  React.useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      try {
+        const userTxt = await AsyncStorage.getItem('userResp');
+        const userJSON = JSON.parse(userTxt);
+        setUser(userJSON);
+      } catch (e) {
+        // Restoring token failed
+      }
+    };
+    if (user === null) bootstrapAsync();
+  }, []);
 
   React.useEffect(() => {
     clearInterval(intval);

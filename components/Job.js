@@ -61,9 +61,9 @@ function ItemDisplay(props) {
   if (!userID) {
     return <ActivityIndicator />;
   }
-  let isYourJob = true
+  let isYourJob = true;
   if (driver && userID != driver.id) {
-    isYourJob = false
+    isYourJob = false;
   }
   /* STEP:
     1. wait
@@ -73,7 +73,7 @@ function ItemDisplay(props) {
   */
   const isActiveStep = ['accept', 'onboard'].includes(step);
   let isActive = isYourJob || isActiveStep;
-  let currStep = step
+  let currStep = step;
   let relTime = `${tmPrimary !== 'Passed' ? 'In ' : ''} ${tmPrimary}`;
   currStep = isYourJob ? step : tmPrimary === 'Passed' ? 'passed' : step;
   if (cancelled_at !== null) {
@@ -225,7 +225,7 @@ export default function Job({route}) {
     origin: {},
     destination: {},
   });
-  const [userData, setUserData] = React.useState({});
+  const [userData, setUserData] = React.useState(null);
   const [item, setItem] = React.useState({});
   const {loading, error, data} = useSubscription(JOB_SUBSCRIPTION, {
     shouldResubscribe: true,
@@ -243,7 +243,7 @@ export default function Job({route}) {
         // Restoring token failed
       }
     };
-    bootstrapAsync();
+    if (userData === null) bootstrapAsync();
   }, []);
 
   React.useEffect(() => {

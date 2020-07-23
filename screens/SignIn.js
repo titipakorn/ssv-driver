@@ -77,6 +77,7 @@ export default function SignInScreen() {
         onChangeText={v => setUsername(v.toLocaleLowerCase())}
         style={{
           height: 40,
+          color: '#333',
           backgroundColor: 'white',
           borderWidth: 0,
           marginBottom: 1,
@@ -90,6 +91,7 @@ export default function SignInScreen() {
         secureTextEntry
         style={{
           height: 40,
+          color: '#333',
           backgroundColor: 'white',
           borderWidth: 0,
           marginBottom: 5,

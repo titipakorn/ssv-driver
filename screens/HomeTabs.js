@@ -3,8 +3,7 @@ import {View, Text, Button, SafeAreaView, StyleSheet} from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {AuthContext} from '../App';
-import Default from './Default';
+import Profile from '../components/Profile';
 import AvailableJobs from '../components/AvailableJobs';
 import Job from '../components/Job';
 import JobHistory from '../components/JobHistory';
@@ -13,7 +12,6 @@ const Tab = createBottomTabNavigator();
 const MainStack = createStackNavigator();
 
 export function IndexScreen() {
-  // const {signOut} = React.useContext(AuthContext);
   return (
     <MainStack.Navigator
       screenOptions={{
@@ -70,7 +68,7 @@ export default function HomeTabs() {
       }}>
       <Tab.Screen name="Home" component={IndexScreen} />
       <Tab.Screen name="History" component={JobHistory} />
-      <Tab.Screen name="Profile" component={Default} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 }
