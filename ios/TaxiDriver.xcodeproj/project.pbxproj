@@ -7,19 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00E356F31AD99517003FC87E /* MyTestAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MyTestAppTests.m */; };
+		00E356F31AD99517003FC87E /* TaxiDriverAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TaxiDriverAppTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2CCA4D77542F4825D5DADB8E /* libPods-MyTestApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D97AABEED164DB991C0FAFA /* libPods-MyTestApp-tvOSTests.a */; };
+		2CCA4D77542F4825D5DADB8E /* libPods-TaxiDriverApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D97AABEED164DB991C0FAFA /* libPods-TaxiDriverApp-tvOSTests.a */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		2DCD954D1E0B4F2C00145EB5 /* MyTestAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* MyTestAppTests.m */; };
-		54B179D822C06EA22BA8CF26 /* libPods-MyTestApp-MyTestAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D698E8D2A1A5AC2F6A3493 /* libPods-MyTestApp-MyTestAppTests.a */; };
-		7482B2CB2646E1051124D7DC /* libPods-MyTestApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B4EE40B824B5D436FDDD24C /* libPods-MyTestApp-tvOS.a */; };
-		7FC46A20C3B580CAAD689B79 /* libPods-MyTestApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B21CBF04451F28355FEE91F /* libPods-MyTestApp.a */; };
+		2DCD954D1E0B4F2C00145EB5 /* TaxiDriverAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* TaxiDriverAppTests.m */; };
+		54B179D822C06EA22BA8CF26 /* libPods-TaxiDriverApp-TaxiDriverAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C4D698E8D2A1A5AC2F6A3493 /* libPods-TaxiDriverApp-TaxiDriverAppTests.a */; };
+		7482B2CB2646E1051124D7DC /* libPods-TaxiDriverApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B4EE40B824B5D436FDDD24C /* libPods-TaxiDriverApp-tvOS.a */; };
+		D4D0EE2F4E81C12426424A55 /* libPods-TaxiDriverApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B21CBF04451F28355FEE91F /* libPods-TaxiDriverApp.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,43 +28,43 @@
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
-			remoteInfo = MyTestApp;
+			remoteInfo = TaxiDriverApp;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
-			remoteInfo = "MyTestApp-tvOS";
+			remoteInfo = "TaxiDriverApp-tvOS";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		00E356EE1AD99517003FC87E /* MyTestAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyTestAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		00E356EE1AD99517003FC87E /* TaxiDriverAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaxiDriverAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		00E356F21AD99517003FC87E /* MyTestAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyTestAppTests.m; sourceTree = "<group>"; };
-		084F623DF36A6B29AABD0322 /* Pods-MyTestApp-MyTestAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-MyTestAppTests.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp-MyTestAppTests/Pods-MyTestApp-MyTestAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* MyTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = MyTestApp/AppDelegate.h; sourceTree = "<group>"; };
-		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = MyTestApp/AppDelegate.m; sourceTree = "<group>"; };
+		00E356F21AD99517003FC87E /* TaxiDriverAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TaxiDriverAppTests.m; sourceTree = "<group>"; };
+		084F623DF36A6B29AABD0322 /* Pods-TaxiDriverApp-TaxiDriverAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiDriverApp-TaxiDriverAppTests.release.xcconfig"; path = "Target Support Files/Pods-TaxiDriverApp-TaxiDriverAppTests/Pods-TaxiDriverApp-TaxiDriverAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		13B07F961A680F5B00A75B9A /* TaxiDriver.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaxiDriver.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = TaxiDriverApp/AppDelegate.h; sourceTree = "<group>"; };
+		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = TaxiDriverApp/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = MyTestApp/Images.xcassets; sourceTree = "<group>"; };
-		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = MyTestApp/Info.plist; sourceTree = "<group>"; };
-		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = MyTestApp/main.m; sourceTree = "<group>"; };
-		1D9D6898998E4F9CFB7A6341 /* Pods-MyTestApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp/Pods-MyTestApp.release.xcconfig"; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* MyTestApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "MyTestApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* MyTestApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MyTestApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4B4EE40B824B5D436FDDD24C /* libPods-MyTestApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyTestApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F0154386C0FC9DA61A2F8C1 /* Pods-MyTestApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-MyTestApp-tvOSTests/Pods-MyTestApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		6B21CBF04451F28355FEE91F /* libPods-MyTestApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyTestApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		6CE3C83C5000F6C0455F7968 /* Pods-MyTestApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-MyTestApp-tvOS/Pods-MyTestApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		6D97AABEED164DB991C0FAFA /* libPods-MyTestApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyTestApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7572CF774C5E2E4D8A759E10 /* Pods-MyTestApp-MyTestAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-MyTestAppTests.debug.xcconfig"; path = "Target Support Files/Pods-MyTestApp-MyTestAppTests/Pods-MyTestApp-MyTestAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		B84801C6B2220921CB4C2DA8 /* Pods-MyTestApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp-tvOS/Pods-MyTestApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		B8E8ABC89293C64144BA0DC6 /* Pods-MyTestApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-MyTestApp-tvOSTests/Pods-MyTestApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		C4D698E8D2A1A5AC2F6A3493 /* libPods-MyTestApp-MyTestAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-MyTestApp-MyTestAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		E7499AB8CEC787DA5AE6A71F /* Pods-MyTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyTestApp.debug.xcconfig"; path = "Target Support Files/Pods-MyTestApp/Pods-MyTestApp.debug.xcconfig"; sourceTree = "<group>"; };
+		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = TaxiDriverApp/Images.xcassets; sourceTree = "<group>"; };
+		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = TaxiDriverApp/Info.plist; sourceTree = "<group>"; };
+		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = TaxiDriverApp/main.m; sourceTree = "<group>"; };
+		1D9D6898998E4F9CFB7A6341 /* Pods-TaxiDriverApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiDriverApp.release.xcconfig"; path = "Target Support Files/Pods-TaxiDriverApp/Pods-TaxiDriverApp.release.xcconfig"; sourceTree = "<group>"; };
+		2D02E47B1E0B4A5D006451C7 /* TaxiDriverApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TaxiDriverApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* TaxiDriverApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "TaxiDriverApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B4EE40B824B5D436FDDD24C /* libPods-TaxiDriverApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TaxiDriverApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4F0154386C0FC9DA61A2F8C1 /* Pods-TaxiDriverApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiDriverApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-TaxiDriverApp-tvOSTests/Pods-TaxiDriverApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6B21CBF04451F28355FEE91F /* libPods-TaxiDriverApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TaxiDriverApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6CE3C83C5000F6C0455F7968 /* Pods-TaxiDriverApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiDriverApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-TaxiDriverApp-tvOS/Pods-TaxiDriverApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		6D97AABEED164DB991C0FAFA /* libPods-TaxiDriverApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TaxiDriverApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7572CF774C5E2E4D8A759E10 /* Pods-TaxiDriverApp-TaxiDriverAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiDriverApp-TaxiDriverAppTests.debug.xcconfig"; path = "Target Support Files/Pods-TaxiDriverApp-TaxiDriverAppTests/Pods-TaxiDriverApp-TaxiDriverAppTests.debug.xcconfig"; sourceTree = "<group>"; };
+		B84801C6B2220921CB4C2DA8 /* Pods-TaxiDriverApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiDriverApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-TaxiDriverApp-tvOS/Pods-TaxiDriverApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		B8E8ABC89293C64144BA0DC6 /* Pods-TaxiDriverApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiDriverApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-TaxiDriverApp-tvOSTests/Pods-TaxiDriverApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		C4D698E8D2A1A5AC2F6A3493 /* libPods-TaxiDriverApp-TaxiDriverAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TaxiDriverApp-TaxiDriverAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E7499AB8CEC787DA5AE6A71F /* Pods-TaxiDriverApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TaxiDriverApp.debug.xcconfig"; path = "Target Support Files/Pods-TaxiDriverApp/Pods-TaxiDriverApp.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -74,7 +74,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54B179D822C06EA22BA8CF26 /* libPods-MyTestApp-MyTestAppTests.a in Frameworks */,
+				54B179D822C06EA22BA8CF26 /* libPods-TaxiDriverApp-TaxiDriverAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,7 +82,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7FC46A20C3B580CAAD689B79 /* libPods-MyTestApp.a in Frameworks */,
+				D4D0EE2F4E81C12426424A55 /* libPods-TaxiDriverApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7482B2CB2646E1051124D7DC /* libPods-MyTestApp-tvOS.a in Frameworks */,
+				7482B2CB2646E1051124D7DC /* libPods-TaxiDriverApp-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,20 +98,20 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2CCA4D77542F4825D5DADB8E /* libPods-MyTestApp-tvOSTests.a in Frameworks */,
+				2CCA4D77542F4825D5DADB8E /* libPods-TaxiDriverApp-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		00E356EF1AD99517003FC87E /* MyTestAppTests */ = {
+		00E356EF1AD99517003FC87E /* TaxiDriverTests */ = {
 			isa = PBXGroup;
 			children = (
-				00E356F21AD99517003FC87E /* MyTestAppTests.m */,
+				00E356F21AD99517003FC87E /* TaxiDriverAppTests.m */,
 				00E356F01AD99517003FC87E /* Supporting Files */,
 			);
-			path = MyTestAppTests;
+			path = TaxiDriverTests;
 			sourceTree = "<group>";
 		};
 		00E356F01AD99517003FC87E /* Supporting Files */ = {
@@ -122,7 +122,7 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		13B07FAE1A68108700A75B9A /* MyTestApp */ = {
+		13B07FAE1A68108700A75B9A /* TaxiDriver */ = {
 			isa = PBXGroup;
 			children = (
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
@@ -133,7 +133,7 @@
 				13B07FB11A68108700A75B9A /* LaunchScreen.xib */,
 				13B07FB71A68108700A75B9A /* main.m */,
 			);
-			name = MyTestApp;
+			name = TaxiDriver;
 			sourceTree = "<group>";
 		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
@@ -141,10 +141,10 @@
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				6B21CBF04451F28355FEE91F /* libPods-MyTestApp.a */,
-				C4D698E8D2A1A5AC2F6A3493 /* libPods-MyTestApp-MyTestAppTests.a */,
-				4B4EE40B824B5D436FDDD24C /* libPods-MyTestApp-tvOS.a */,
-				6D97AABEED164DB991C0FAFA /* libPods-MyTestApp-tvOSTests.a */,
+				6B21CBF04451F28355FEE91F /* libPods-TaxiDriverApp.a */,
+				C4D698E8D2A1A5AC2F6A3493 /* libPods-TaxiDriverApp-TaxiDriverAppTests.a */,
+				4B4EE40B824B5D436FDDD24C /* libPods-TaxiDriverApp-tvOS.a */,
+				6D97AABEED164DB991C0FAFA /* libPods-TaxiDriverApp-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -159,9 +159,9 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				13B07FAE1A68108700A75B9A /* MyTestApp */,
+				13B07FAE1A68108700A75B9A /* TaxiDriver */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
-				00E356EF1AD99517003FC87E /* MyTestAppTests */,
+				00E356EF1AD99517003FC87E /* TaxiDriverTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				C55C2CD04CAED551B99D8E86 /* Pods */,
@@ -175,10 +175,10 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* MyTestApp.app */,
-				00E356EE1AD99517003FC87E /* MyTestAppTests.xctest */,
-				2D02E47B1E0B4A5D006451C7 /* MyTestApp-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* MyTestApp-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* TaxiDriver.app */,
+				00E356EE1AD99517003FC87E /* TaxiDriverAppTests.xctest */,
+				2D02E47B1E0B4A5D006451C7 /* TaxiDriverApp-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* TaxiDriverApp-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -186,14 +186,14 @@
 		C55C2CD04CAED551B99D8E86 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				E7499AB8CEC787DA5AE6A71F /* Pods-MyTestApp.debug.xcconfig */,
-				1D9D6898998E4F9CFB7A6341 /* Pods-MyTestApp.release.xcconfig */,
-				7572CF774C5E2E4D8A759E10 /* Pods-MyTestApp-MyTestAppTests.debug.xcconfig */,
-				084F623DF36A6B29AABD0322 /* Pods-MyTestApp-MyTestAppTests.release.xcconfig */,
-				6CE3C83C5000F6C0455F7968 /* Pods-MyTestApp-tvOS.debug.xcconfig */,
-				B84801C6B2220921CB4C2DA8 /* Pods-MyTestApp-tvOS.release.xcconfig */,
-				4F0154386C0FC9DA61A2F8C1 /* Pods-MyTestApp-tvOSTests.debug.xcconfig */,
-				B8E8ABC89293C64144BA0DC6 /* Pods-MyTestApp-tvOSTests.release.xcconfig */,
+				E7499AB8CEC787DA5AE6A71F /* Pods-TaxiDriverApp.debug.xcconfig */,
+				1D9D6898998E4F9CFB7A6341 /* Pods-TaxiDriverApp.release.xcconfig */,
+				7572CF774C5E2E4D8A759E10 /* Pods-TaxiDriverApp-TaxiDriverAppTests.debug.xcconfig */,
+				084F623DF36A6B29AABD0322 /* Pods-TaxiDriverApp-TaxiDriverAppTests.release.xcconfig */,
+				6CE3C83C5000F6C0455F7968 /* Pods-TaxiDriverApp-tvOS.debug.xcconfig */,
+				B84801C6B2220921CB4C2DA8 /* Pods-TaxiDriverApp-tvOS.release.xcconfig */,
+				4F0154386C0FC9DA61A2F8C1 /* Pods-TaxiDriverApp-tvOSTests.debug.xcconfig */,
+				B8E8ABC89293C64144BA0DC6 /* Pods-TaxiDriverApp-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -208,9 +208,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		00E356ED1AD99517003FC87E /* MyTestAppTests */ = {
+		00E356ED1AD99517003FC87E /* TaxiDriverAppTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MyTestAppTests" */;
+			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "TaxiDriverAppTests" */;
 			buildPhases = (
 				A8A183D5D81D23B935555A2C /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
@@ -223,14 +223,14 @@
 			dependencies = (
 				00E356F51AD99517003FC87E /* PBXTargetDependency */,
 			);
-			name = MyTestAppTests;
-			productName = MyTestAppTests;
-			productReference = 00E356EE1AD99517003FC87E /* MyTestAppTests.xctest */;
+			name = TaxiDriverAppTests;
+			productName = TaxiDriverAppTests;
+			productReference = 00E356EE1AD99517003FC87E /* TaxiDriverAppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		13B07F861A680F5B00A75B9A /* MyTestApp */ = {
+		13B07F861A680F5B00A75B9A /* TaxiDriverApp */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MyTestApp" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "TaxiDriverApp" */;
 			buildPhases = (
 				E0CD5180444386A1E70FBFBF /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -244,14 +244,14 @@
 			);
 			dependencies = (
 			);
-			name = MyTestApp;
-			productName = MyTestApp;
-			productReference = 13B07F961A680F5B00A75B9A /* MyTestApp.app */;
+			name = TaxiDriverApp;
+			productName = TaxiDriverApp;
+			productReference = 13B07F961A680F5B00A75B9A /* TaxiDriver.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* MyTestApp-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* TaxiDriverApp-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MyTestApp-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "TaxiDriverApp-tvOS" */;
 			buildPhases = (
 				FECEBB768F70A791F229750C /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
@@ -264,14 +264,14 @@
 			);
 			dependencies = (
 			);
-			name = "MyTestApp-tvOS";
-			productName = "MyTestApp-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* MyTestApp-tvOS.app */;
+			name = "TaxiDriverApp-tvOS";
+			productName = "TaxiDriverApp-tvOS";
+			productReference = 2D02E47B1E0B4A5D006451C7 /* TaxiDriverApp-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* MyTestApp-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* TaxiDriverApp-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MyTestApp-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "TaxiDriverApp-tvOSTests" */;
 			buildPhases = (
 				BCF2B918031190EE598DFD73 /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
@@ -283,9 +283,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "MyTestApp-tvOSTests";
-			productName = "MyTestApp-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* MyTestApp-tvOSTests.xctest */;
+			name = "TaxiDriverApp-tvOSTests";
+			productName = "TaxiDriverApp-tvOSTests";
+			productReference = 2D02E4901E0B4A5D006451C7 /* TaxiDriverApp-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -316,7 +316,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MyTestApp" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "TaxiDriver" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -329,10 +329,10 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* MyTestApp */,
-				00E356ED1AD99517003FC87E /* MyTestAppTests */,
-				2D02E47A1E0B4A5D006451C7 /* MyTestApp-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* MyTestApp-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* TaxiDriverApp */,
+				00E356ED1AD99517003FC87E /* TaxiDriverAppTests */,
+				2D02E47A1E0B4A5D006451C7 /* TaxiDriverApp-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* TaxiDriverApp-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -392,7 +392,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MyTestApp/Pods-MyTestApp-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TaxiDriverApp/Pods-TaxiDriverApp-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -431,7 +431,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MyTestApp/Pods-MyTestApp-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TaxiDriverApp/Pods-TaxiDriverApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		1A5C6341C5F702B8B2460746 /* [CP] Copy Pods Resources */ = {
@@ -440,7 +440,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-MyTestApp-MyTestAppTests/Pods-MyTestApp-MyTestAppTests-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-TaxiDriverApp-TaxiDriverAppTests/Pods-TaxiDriverApp-TaxiDriverAppTests-resources.sh",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/AntDesign.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/Entypo.ttf",
 				"${PODS_ROOT}/../../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf",
@@ -479,7 +479,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MyTestApp-MyTestAppTests/Pods-MyTestApp-MyTestAppTests-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TaxiDriverApp-TaxiDriverAppTests/Pods-TaxiDriverApp-TaxiDriverAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
@@ -511,7 +511,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MyTestApp-MyTestAppTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-TaxiDriverApp-TaxiDriverAppTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -533,7 +533,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MyTestApp-tvOSTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-TaxiDriverApp-tvOSTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -555,7 +555,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MyTestApp-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-TaxiDriverApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -615,7 +615,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-MyTestApp-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-TaxiDriverApp-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -629,7 +629,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00E356F31AD99517003FC87E /* MyTestAppTests.m in Sources */,
+				00E356F31AD99517003FC87E /* TaxiDriverAppTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -655,7 +655,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2DCD954D1E0B4F2C00145EB5 /* MyTestAppTests.m in Sources */,
+				2DCD954D1E0B4F2C00145EB5 /* TaxiDriverAppTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -664,12 +664,12 @@
 /* Begin PBXTargetDependency section */
 		00E356F51AD99517003FC87E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 13B07F861A680F5B00A75B9A /* MyTestApp */;
+			target = 13B07F861A680F5B00A75B9A /* TaxiDriverApp */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
 		};
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* MyTestApp-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* TaxiDriverApp-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -681,7 +681,7 @@
 				13B07FB21A68108700A75B9A /* Base */,
 			);
 			name = LaunchScreen.xib;
-			path = MyTestApp;
+			path = TaxiDriverApp;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -689,14 +689,14 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7572CF774C5E2E4D8A759E10 /* Pods-MyTestApp-MyTestAppTests.debug.xcconfig */;
+			baseConfigurationReference = 7572CF774C5E2E4D8A759E10 /* Pods-TaxiDriverApp-TaxiDriverAppTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				INFOPLIST_FILE = MyTestAppTests/Info.plist;
+				INFOPLIST_FILE = TaxiDriverAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -706,17 +706,17 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyTestApp.app/MyTestApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaxiDriver.app/TaxiDriver";
 			};
 			name = Debug;
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 084F623DF36A6B29AABD0322 /* Pods-MyTestApp-MyTestAppTests.release.xcconfig */;
+			baseConfigurationReference = 084F623DF36A6B29AABD0322 /* Pods-TaxiDriverApp-TaxiDriverAppTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
-				INFOPLIST_FILE = MyTestAppTests/Info.plist;
+				INFOPLIST_FILE = TaxiDriverAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -726,13 +726,13 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyTestApp.app/MyTestApp";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaxiDriver.app/TaxiDriver";
 			};
 			name = Release;
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E7499AB8CEC787DA5AE6A71F /* Pods-MyTestApp.debug.xcconfig */;
+			baseConfigurationReference = E7499AB8CEC787DA5AE6A71F /* Pods-TaxiDriverApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -745,25 +745,26 @@
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
 				);
-				INFOPLIST_FILE = MyTestApp/Info.plist;
+				INFOPLIST_FILE = TaxiDriverApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = MyTestApp;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.satreps.taxi.driver;
+				PRODUCT_NAME = TaxiDriver;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1D9D6898998E4F9CFB7A6341 /* Pods-MyTestApp.release.xcconfig */;
+			baseConfigurationReference = 1D9D6898998E4F9CFB7A6341 /* Pods-TaxiDriverApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -771,24 +772,25 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VHG2JT896D;
-				INFOPLIST_FILE = MyTestApp/Info.plist;
+				INFOPLIST_FILE = TaxiDriverApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = MyTestApp;
+				PRODUCT_BUNDLE_IDENTIFIER = jp.satreps.taxi.driver;
+				PRODUCT_NAME = TaxiDriver;
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 6CE3C83C5000F6C0455F7968 /* Pods-MyTestApp-tvOS.debug.xcconfig */;
+			baseConfigurationReference = 6CE3C83C5000F6C0455F7968 /* Pods-TaxiDriverApp-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -799,14 +801,14 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "MyTestApp-tvOS/Info.plist";
+				INFOPLIST_FILE = "TaxiDriverApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MyTestApp-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.TaxiDriverApp-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -816,7 +818,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B84801C6B2220921CB4C2DA8 /* Pods-MyTestApp-tvOS.release.xcconfig */;
+			baseConfigurationReference = B84801C6B2220921CB4C2DA8 /* Pods-TaxiDriverApp-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -827,14 +829,14 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "MyTestApp-tvOS/Info.plist";
+				INFOPLIST_FILE = "TaxiDriverApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MyTestApp-tvOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.TaxiDriverApp-tvOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
@@ -844,7 +846,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 4F0154386C0FC9DA61A2F8C1 /* Pods-MyTestApp-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 4F0154386C0FC9DA61A2F8C1 /* Pods-TaxiDriverApp-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -854,24 +856,24 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "MyTestApp-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "TaxiDriverApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MyTestApp-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.TaxiDriverApp-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyTestApp-tvOS.app/MyTestApp-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaxiDriverApp-tvOS.app/TaxiDriverApp-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B8E8ABC89293C64144BA0DC6 /* Pods-MyTestApp-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = B8E8ABC89293C64144BA0DC6 /* Pods-TaxiDriverApp-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -881,17 +883,17 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "MyTestApp-tvOSTests/Info.plist";
+				INFOPLIST_FILE = "TaxiDriverApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.MyTestApp-tvOSTests";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.TaxiDriverApp-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MyTestApp-tvOS.app/MyTestApp-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TaxiDriverApp-tvOS.app/TaxiDriverApp-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -1012,7 +1014,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "MyTestAppTests" */ = {
+		00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "TaxiDriverAppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				00E356F61AD99517003FC87E /* Debug */,
@@ -1021,7 +1023,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "MyTestApp" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "TaxiDriverApp" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -1030,7 +1032,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MyTestApp-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "TaxiDriverApp-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -1039,7 +1041,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "MyTestApp-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "TaxiDriverApp-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -1048,7 +1050,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "MyTestApp" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "TaxiDriver" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,
