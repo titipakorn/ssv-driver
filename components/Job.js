@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useSubscription} from '@apollo/react-hooks';
-import {relativeTime, displayTime} from '../libs/day';
+import { useSubscription } from '@apollo/react-hooks';
+import { useKeepAwake } from 'expo-keep-awake';
+import { relativeTime, displayTime } from '../libs/day';
 import AcceptJobButton from './AcceptJobButton';
 import PickupButton from './PickupButton';
 import DropoffButton from './DropoffButton';
@@ -57,7 +58,7 @@ function ItemDisplay(props) {
     tmPrimary,
     tmSecondary,
   } = props.item;
-  const {userID} = props;
+  const { userID } = props;
   if (!userID) {
     return <ActivityIndicator />;
   }
@@ -98,7 +99,7 @@ function ItemDisplay(props) {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{color: 'white'}}>
+          <Text style={{ color: 'white' }}>
             ACTIVE <StopWatch startTime={accepted_at} />
           </Text>
         </View>
@@ -111,19 +112,19 @@ function ItemDisplay(props) {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <Text style={{color: '#444'}}>INACTIVE</Text>
+          <Text style={{ color: '#444' }}>INACTIVE</Text>
         </View>
       )}
-      <View style={{paddingHorizontal: 5}}>
+      <View style={{ paddingHorizontal: 5 }}>
         <View
           style={[
             styles.flexRow,
-            {textAlign: 'right', justifyContent: 'space-between'},
+            { textAlign: 'right', justifyContent: 'space-between' },
           ]}>
-          <Text style={[styles.txtPrimary, {alignSelf: 'flex-end'}]}>
+          <Text style={[styles.txtPrimary, { alignSelf: 'flex-end' }]}>
             {relTime}
           </Text>
-          <Text style={[styles.txtSecondary, {alignSelf: 'flex-end'}]}>
+          <Text style={[styles.txtSecondary, { alignSelf: 'flex-end' }]}>
             At {tmSecondary}
           </Text>
         </View>
@@ -131,14 +132,14 @@ function ItemDisplay(props) {
           <Text style={styles.locationActive}>{from}</Text>
           <Text style={styles.locationInActive}>→ {to}</Text>
         </View>
-        <Text style={{color: '#888', marginVertical: 10}}>
+        <Text style={{ color: '#888', marginVertical: 10 }}>
           Pickup Information
         </Text>
         {user && (
           <Text
             style={[
               styles.locationInActive,
-              {color: '#333', textAlign: 'center'},
+              { color: '#333', textAlign: 'center' },
             ]}>
             {user.username}
           </Text>
@@ -168,9 +169,9 @@ function ItemDisplay(props) {
                   onPress: () => console.log('Cancel Pressed'),
                   style: 'cancel',
                 },
-                {text: 'OK', onPress: () => console.log('OK Pressed')},
+                { text: 'OK', onPress: () => console.log('OK Pressed') },
               ],
-              {cancelable: false},
+              { cancelable: false },
             )
           }>
           <Image
@@ -218,19 +219,20 @@ function process(data) {
   };
 }
 
-export default function Job({route}) {
+export default function Job({ route }) {
   let intval = React.useRef(null);
-  const {id} = route.params;
+  const { id } = route.params;
   const [pins, setPins] = React.useState({
     origin: {},
     destination: {},
   });
   const [userData, setUserData] = React.useState(null);
   const [item, setItem] = React.useState({});
-  const {loading, error, data} = useSubscription(JOB_SUBSCRIPTION, {
+  const { loading, error, data } = useSubscription(JOB_SUBSCRIPTION, {
     shouldResubscribe: true,
-    variables: {id: id},
+    variables: { id: id },
   });
+  useKeepAwake()
 
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -244,6 +246,7 @@ export default function Job({route}) {
       }
     };
     if (userData === null) bootstrapAsync();
+
   }, []);
 
   React.useEffect(() => {
@@ -251,8 +254,8 @@ export default function Job({route}) {
     if (data && data.items.length > 0) {
       setItem(process(data));
       const c = data.items[0];
-      const o = c.place_from || {coordinates: [0, 0]};
-      const d = c.place_to || {coordinates: [0, 0]};
+      const o = c.place_from || { coordinates: [0, 0] };
+      const d = c.place_to || { coordinates: [0, 0] };
       setPins({
         origin: {
           latitude: o.coordinates[1],

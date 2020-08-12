@@ -34,3 +34,9 @@ This pretty much means that xcode path set incorrectly (probably to command line
 
     sudo xcode-select --reset
     xcode-select -print-path
+
+2. KeepAwake pod issue
+
+Dependencies are required to install manually since we use a bare reactnative.
+
+    https://github.com/unimodules/react-native-unimodules

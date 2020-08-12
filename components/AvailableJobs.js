@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
-import {useSubscription} from '@apollo/react-hooks';
-import {relativeTime, displayTime, getToday} from '../libs/day';
+import { useSubscription } from '@apollo/react-hooks';
+import { relativeTime, displayTime, getToday } from '../libs/day';
 
 const QUEUE_SUBSCRIPTION = gql`
   subscription QUEUE_SUBSCRIPTION($userId: uuid, $day: timestamptz) {
@@ -33,18 +33,22 @@ const QUEUE_SUBSCRIPTION = gql`
       reserved_at
       picked_up_at
       cancelled_at
+      driver_id
     }
   }
 `;
 
 function Item(row) {
-  const {navigation, id, from, to, tmPrimary, tmSecondary, cancelled_at} = row;
+  const { navigation, id, from, to, tmPrimary, tmSecondary, cancelled_at, driver_id, userID } = row;
   let relTime = tmPrimary;
   if (cancelled_at !== null) {
     relTime = 'Cancelled';
   } else if (relTime == 'Passed') {
     relTime = 'Anytime now';
   }
+  const isMyJob = driver_id === userID
+  let MyJobStyle = {}
+  if (isMyJob) MyJobStyle = { backgroundColor: '#35fcd733' }
   return (
     <TouchableHighlight
       activeOpacity={0.8}
@@ -55,24 +59,24 @@ function Item(row) {
           otherParam: 'anything you want here',
         })
       }
-      style={[styles.item]}>
-      <View style={styles.flexRow}>
+      style={[styles.item, MyJobStyle]}>
+      <View style={[styles.flexRow]}>
         {from !== null && (
-          <View style={[styles.flexColumn, {flex: 1}]}>
+          <View style={[styles.flexColumn, { flex: 1 }]}>
             <Text style={styles.locationPickup}>{from}</Text>
             <Text style={styles.locationDestination}>→ {to}</Text>
           </View>
         )}
-        <View style={[styles.flexColumn, {textAlign: 'right'}]}>
-          <Text style={[styles.txtPrimary, {alignSelf: 'flex-end'}]}>
+        <View style={[styles.flexColumn, { textAlign: 'right' }]}>
+          <Text style={[styles.txtPrimary, { alignSelf: 'flex-end' }]}>
             {relTime}
           </Text>
-          <Text style={[styles.txtSecondary, {alignSelf: 'flex-end'}]}>
+          <Text style={[styles.txtSecondary, { alignSelf: 'flex-end' }]}>
             {tmSecondary}
           </Text>
         </View>
       </View>
-    </TouchableHighlight>
+    </TouchableHighlight >
   );
 }
 function itemProcess(data) {
@@ -85,15 +89,15 @@ function itemProcess(data) {
   }));
 }
 
-export default function AvailableJobs({navigation}) {
+export default function AvailableJobs({ navigation }) {
   let intval = React.useRef(null);
   const [user, setUser] = React.useState(null);
   const [items, setItems] = React.useState([]);
   // const [selected, setSelected] = React.useState(new Map());
-  const {loading, error, data} = useSubscription(QUEUE_SUBSCRIPTION, {
+  const { loading, error, data } = useSubscription(QUEUE_SUBSCRIPTION, {
     shouldResubscribe: true,
     skip: user == null,
-    variables: {userId: user ? user.id : null, day: getToday()},
+    variables: { userId: user ? user.id : null, day: getToday() },
   });
   /* const onSelect = React.useCallback(
     id => {
@@ -136,22 +140,23 @@ export default function AvailableJobs({navigation}) {
       {error && <Text>{error.message}</Text>}
       <FlatList
         data={items}
-        renderItem={({item}) => (
+        renderItem={({ item }) => (
           <Item
             {...item}
+            userID={user ? user.id : null}
             navigation={navigation}
-            // selected={!selected.get(item.id)}
-            // onSelect={onSelect}
+          // selected={!selected.get(item.id)}
+          // onSelect={onSelect}
           />
         )}
         keyExtractor={item => `${item.id}`}
         ListEmptyComponent={() => (
-          <Text style={{textAlign: 'center', paddingVertical: 20}}>
+          <Text style={{ textAlign: 'center', paddingVertical: 20 }}>
             No job at the moment, Yay!
           </Text>
         )}
       />
-      {loading && <ActivityIndicator style={{marginVertical: 20}} />}
+      {loading && <ActivityIndicator style={{ marginVertical: 20 }} />}
     </>
   );
 }
