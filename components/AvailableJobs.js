@@ -135,6 +135,7 @@ export default function AvailableJobs({ navigation }) {
     }
   }, [data]);
 
+  console.log('available jobs: ', error)
   return (
     <>
       {error && <Text>{error.message}</Text>}
