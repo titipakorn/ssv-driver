@@ -1,7 +1,7 @@
 import React from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import gql from 'graphql-tag';
-import {useMutation} from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import dayjs from 'dayjs';
 
 const INSERT_TRACES = gql`
@@ -19,16 +19,16 @@ const INSERT_TRACES = gql`
 `;
 
 async function upload(fn, fnLoading, objs) {
-  console.log('[UL] ===> ', objs.length);
+  // console.log('[UL] ===> ', objs.length);
   fnLoading(true);
   const variables = {
     objs,
   };
-  console.log('[UL]: uploadTraces', variables);
+  // console.log('[UL]: uploadTraces', variables);
   const res = await fn({
     variables,
   });
-  console.log('[UL]:  result: ', res);
+  // console.log('[UL]:  result: ', res);
   fnLoading(false);
 
   // .then(res => {
@@ -43,11 +43,11 @@ async function upload(fn, fnLoading, objs) {
   // });
 }
 
-export default function TraceLogger({tripID, tripState, position}) {
+export default function TraceLogger({ tripID, tripState, position }) {
   const [log, setLog] = React.useState([]);
   const [tmsp, setTmsp] = React.useState(null);
   const [processing, setProcessing] = React.useState(false);
-  const [insertTraces, {loading, error}] = useMutation(INSERT_TRACES);
+  const [insertTraces, { loading, error }] = useMutation(INSERT_TRACES);
 
   React.useEffect(() => {
     return () => {
@@ -58,17 +58,17 @@ export default function TraceLogger({tripID, tripState, position}) {
   }, []);
 
   React.useEffect(() => {
-    console.log('log changed');
+    // console.log('log changed');
     if (log.length === 0) return;
     const duration = (dayjs() - dayjs(log[0].timestamp)) / 1000;
-    console.log(
-      '  >> duration ',
-      duration,
-      '|log#',
-      log.length,
-      ' state: ',
-      tripState,
-    );
+    // console.log(
+    //   '  >> duration ',
+    //   duration,
+    //   '|log#',
+    //   log.length,
+    //   ' state: ',
+    //   tripState,
+    // );
     if (duration > 30 || log.length > 20 || tripState === 'done') {
       upload(insertTraces, setProcessing, log);
       setLog([]);
@@ -83,7 +83,7 @@ export default function TraceLogger({tripID, tripState, position}) {
     if (tripState === 'wait') return;
     if (tripState === 'done' && log.length == 0) return;
 
-    const {coords, timestamp} = position;
+    const { coords, timestamp } = position;
     const item = {
       trip_id: tripID,
       trip_state: tripState,
@@ -92,7 +92,7 @@ export default function TraceLogger({tripID, tripState, position}) {
       altitude: coords.altitude,
       heading: coords.heading,
       speed: coords.speed,
-      point: {type: 'Point', coordinates: [coords.longitude, coords.latitude]},
+      point: { type: 'Point', coordinates: [coords.longitude, coords.latitude] },
     };
 
     const updatedLog = timestamp > tmsp ? [...log, item] : log;

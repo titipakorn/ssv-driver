@@ -21,7 +21,7 @@ import StopWatch from './StopWatch';
 import Map from './Map';
 
 const JOB_SUBSCRIPTION = gql`
-  subscription JOB_SUBSCRIPTION($id: smallint) {
+  subscription JOB_SUBSCRIPTION($id: Int!) {
     items: trip(where: {id: {_eq: $id}}) {
       id
       from
@@ -39,6 +39,11 @@ const JOB_SUBSCRIPTION = gql`
       picked_up_at
       dropped_off_at
       cancelled_at
+      driver_feedback
+      traces(order_by:{timestamp:desc}) {
+        timestamp
+        point
+      }
     }
   }
 `;
@@ -72,6 +77,7 @@ function ItemDisplay(props) {
     3. onboard
     4. done
   */
+  // console.log('current step: ', step)
   const isActiveStep = ['accept', 'onboard'].includes(step);
   let isActive = isYourJob || isActiveStep;
   let currStep = step;
@@ -100,7 +106,7 @@ function ItemDisplay(props) {
             alignItems: 'center',
           }}>
           <Text style={{ color: 'white' }}>
-            ACTIVE <StopWatch startTime={accepted_at} />
+            ACTIVE - <StopWatch startTime={accepted_at} />
           </Text>
         </View>
       )}
@@ -188,7 +194,7 @@ function ItemDisplay(props) {
         <>
           {currStep === 'accept' && <PickupButton jobID={id} />}
           {currStep === 'onboard' && <DropoffButton jobID={id} />}
-          {currStep === 'done' && <FeedbackButton jobID={id} />}
+          {currStep === 'done' && <FeedbackButton jobID={id} userID={userID} />}
         </>
       )}
     </View>
@@ -201,11 +207,12 @@ function process(data) {
     1. wait
     2. accept
     3. onboard
-    4. done
+    4. done [wait for feedback]
+    5. over
   */
   let step = 'wait';
   if (o.dropped_off_at != null) {
-    step = 'done';
+    step = o.driver_feedback === null ? 'done' : 'over';
   } else if (o.picked_up_at !== null) {
     step = 'onboard';
   } else if (o.accepted_at !== null) {

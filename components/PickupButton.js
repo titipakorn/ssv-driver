@@ -1,10 +1,12 @@
 import React from 'react';
-import {ActivityIndicator, Alert, TouchableOpacity, Text} from 'react-native';
+import { ActivityIndicator, Modal, TouchableOpacity, TouchableHighlight, View, StyleSheet, Text } from 'react-native';
 import gql from 'graphql-tag';
-import {useMutation} from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { modelStyles } from './Modal'
 
 const PICKUP_TASK_MUTATION = gql`
-  mutation PICKUP_TASK_MUTATION($jobID: smallint, $now: timestamptz) {
+  mutation PICKUP_TASK_MUTATION($jobID: Int!, $now: timestamptz!) {
     update_trip(where: {id: {_eq: $jobID}}, _set: {picked_up_at: $now}) {
       affected_rows
       returning {
@@ -15,10 +17,11 @@ const PICKUP_TASK_MUTATION = gql`
   }
 `;
 
-export default function PickupButton({jobID}) {
+export default function PickupButton({ jobID }) {
   let handler = React.useRef(null);
+  const [modalVisible, setModalVisible] = React.useState(false);
   const [processing, setProcessing] = React.useState(false);
-  const [pickup, {loading, error}] = useMutation(PICKUP_TASK_MUTATION);
+  const [pickup, { loading, error }] = useMutation(PICKUP_TASK_MUTATION);
   // refetch should not be ncessary since it's subscription thing
   let buttontext = (
     <Text
@@ -58,32 +61,62 @@ export default function PickupButton({jobID}) {
   }, [loading]);
 
   return (
-    <TouchableOpacity
-      style={{
-        backgroundColor: error ? '#f43030' : '#15c146',
-        height: 55,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-      disabled={processing || loading || error}
-      onPress={() => {
-        setProcessing(true);
-        const variables = {
-          jobID,
-          now: new Date(),
-        };
-        pickup({
-          variables,
-        })
-          .then(res => {
-            // console.log('done: accepting job', res);
-            // console.log(res.data.update_trip.returning);
-          })
-          .catch(err => {
-            // console.log('err: ', err);
-          });
-      }}>
-      {buttontext}
-    </TouchableOpacity>
+    <>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+        }}
+      >
+        <View style={modelStyles.centeredView}>
+          <View style={modelStyles.modalView}>
+            <View style={modelStyles.closeButton} >
+              <TouchableOpacity
+                onPress={() => { setModalVisible(false) }}
+              >
+                <Icon name="ios-close" size={50} color={"#aaa"} />
+              </TouchableOpacity>
+            </View>
+            <Text style={modelStyles.modalTitle}>Pick up your customer?</Text>
+            <TouchableHighlight
+              style={{ ...modelStyles.openButton, marginTop: 30, backgroundColor: "#2196F3" }}
+              onPress={() => {
+                setProcessing(true);
+                const variables = {
+                  jobID,
+                  now: new Date(),
+                };
+                pickup({
+                  variables,
+                })
+                  .then(res => {
+                    // console.log('done: accepting job', res);
+                    // console.log(res.data.update_trip.returning);
+                  })
+                  .catch(err => {
+                    // console.log('err: ', err);
+                  });
+              }}>
+              <Text style={modelStyles.textStyle}>Confirm</Text>
+            </TouchableHighlight>
+          </View>
+        </View>
+      </Modal>
+      <TouchableOpacity
+        style={{
+          backgroundColor: error ? '#f43030' : '#15c146',
+          height: 55,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+        disabled={processing || loading || error}
+        onPress={() => {
+          setModalVisible(!modalVisible)
+        }}>
+        {buttontext}
+      </TouchableOpacity>
+    </>
   );
 }

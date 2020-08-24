@@ -10,12 +10,13 @@ import {
   SafeAreaView,
 } from 'react-native';
 import gql from 'graphql-tag';
-import {useQuery} from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {displayDatetime, minDuration} from '../libs/day';
+import { Rating } from 'react-native-ratings';
+import { displayDatetime, minDuration } from '../libs/day';
 
-const JOB_HISTORY_QUERY = gql`
+export const JOB_HISTORY_QUERY = gql`
   query JOB_HISTORY_QUERY($userId: uuid) {
     items: trip(
       where: {
@@ -36,65 +37,82 @@ const JOB_HISTORY_QUERY = gql`
       accepted_at
       picked_up_at
       dropped_off_at
+      driver_feedback
     }
   }
 `;
 
 function Item(row) {
   const {
+    navigation,
+    id,
     from,
     to,
     reserved_at,
     accepted_at,
     picked_up_at,
     dropped_off_at,
+    driver_feedback,
   } = row;
   const duration = minDuration(accepted_at || picked_up_at, dropped_off_at);
+  // console.log('driver_feedback: #', id, ' = ', driver_feedback, driver_feedback !== null)
   return (
     <TouchableHighlight
       activeOpacity={0.8}
       underlayColor="#DDDDDD"
-      onPress={() => {}}
+      onPress={() =>
+        navigation.navigate('Job', {
+          id: id,
+          otherParam: 'history',
+        })
+      }
       style={[styles.item]}>
       <View style={styles.flexColumn}>
-        <View style={[styles.flexRow, {justifyContent: 'space-between'}]}>
+        <View style={[styles.flexRow, { justifyContent: 'space-between' }]}>
           <Text style={styles.txtPrimary}>{displayDatetime(reserved_at)}</Text>
           <Text style={styles.txtPrimary}>{`${duration.toFixed(0)} min`}</Text>
         </View>
         <View style={styles.flexRow}>
           {from !== null && (
-            <View style={[styles.flexColumn, {flex: 1}]}>
+            <View style={[styles.flexColumn, { flex: 1 }]}>
               <Text style={styles.locationPickup}>{from}</Text>
               <Text style={styles.locationDestination}>→ {to}</Text>
             </View>
           )}
-          <View style={[styles.flexColumn, {textAlign: 'right'}]}>
+          <View style={[styles.flexColumn, { textAlign: 'right' }]}>
             <Icon
               name={'ios-checkmark-circle-outline'}
               size={40}
               color="#999"
             />
+            <Text style={styles.txtMuted}>#{id}</Text>
             {/* <Icon name={'ios-radio-button-off'} size={40} color="#999" /> */}
           </View>
         </View>
-        <View style={[styles.flexRow, {justifyContent: 'center'}]}>
-          <Icon name={'ios-star'} size={30} color="#999" />
-          <Icon name={'ios-star'} size={30} color="#999" />
-          <Icon name={'ios-star'} size={30} color="#999" />
-          <Icon name={'ios-star'} size={30} color="#999" />
-          <Icon name={'ios-star'} size={30} color="#999" />
+        <View style={[styles.flexRow, { justifyContent: 'center' }]}>
+          {driver_feedback !== null && (
+            <Rating
+              type="custom"
+              startingValue={driver_feedback}
+              defaultRating={5}
+              readonly={true}
+              imageSize={30}
+              ratingColor='#04cc82'
+              tintColor='#f0f0f0'
+              ratingBackgroundColor='white'
+            />)}
         </View>
       </View>
     </TouchableHighlight>
   );
 }
 
-export default function JobHistory({navigation}) {
+export default function JobHistory({ navigation }) {
   const [selected, setSelected] = React.useState(new Map());
   const [user, setUser] = React.useState(null);
-  const {loading, error, data} = useQuery(JOB_HISTORY_QUERY, {
+  const { loading, error, data } = useQuery(JOB_HISTORY_QUERY, {
     skip: user == null,
-    variables: {userId: user ? user.id : null},
+    variables: { userId: user ? user.id : null },
   });
 
   React.useEffect(() => {
@@ -129,7 +147,7 @@ export default function JobHistory({navigation}) {
       {data && (
         <FlatList
           data={data.items}
-          renderItem={({item}) => (
+          renderItem={({ item }) => (
             <Item
               {...item}
               navigation={navigation}
@@ -183,4 +201,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#666',
   },
+  txtMuted: {
+    fontSize: 10,
+    color: '#AAA',
+    textAlign: 'right',
+  }
 });

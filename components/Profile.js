@@ -1,18 +1,17 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  Alert,
   Image,
   StyleSheet,
-  Button,
   SafeAreaView,
+  TouchableHighlight,
   Text,
   View,
 } from 'react-native';
 import gql from 'graphql-tag';
-import {useQuery} from '@apollo/react-hooks';
+import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
-import {AuthContext} from '../App';
+import { AuthContext } from '../App';
 
 const PROFILE_QUERY = gql`
   query PROFILE_QUERY($userId: uuid) {
@@ -23,11 +22,11 @@ const PROFILE_QUERY = gql`
   }
 `;
 
-export default function Profile({navigation}) {
-  const {signOut} = React.useContext(AuthContext);
+export default function Profile({ navigation }) {
+  const { signOut } = React.useContext(AuthContext);
   const [user, setUser] = React.useState(null);
-  const {loading, error, data} = useQuery(PROFILE_QUERY, {
-    variables: {userId: user ? user.id : null},
+  const { loading, error, data } = useQuery(PROFILE_QUERY, {
+    variables: { userId: user ? user.id : null },
   });
 
   React.useEffect(() => {
@@ -49,6 +48,11 @@ export default function Profile({navigation}) {
   return (
     <SafeAreaView>
       <Text style={styles.title}>Profile</Text>
+      <View style={styles.Ops}>
+        <TouchableHighlight style={styles.Button} onPress={signOut}>
+          <Text style={styles.ButtonText}>Sign out</Text>
+        </TouchableHighlight>
+      </View>
       {loading && <ActivityIndicator />}
       {error && <Text>{error}</Text>}
 
@@ -59,7 +63,6 @@ export default function Profile({navigation}) {
         </>
       )}
 
-      <Button title="Sign out" onPress={signOut} />
     </SafeAreaView>
   );
 }
@@ -77,4 +80,18 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
   },
+  Ops: {
+    flexDirection: 'row-reverse',
+  },
+  Button: {
+    backgroundColor: "#fc4447",
+    borderRadius: 10,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    elevation: 2,
+    margin: 5,
+  },
+  ButtonText: {
+    color: 'white',
+  }
 });
