@@ -69,7 +69,7 @@ export default function TraceLogger({ tripID, tripState, position }) {
     //   ' state: ',
     //   tripState,
     // );
-    if (duration > 30 || log.length > 20 || tripState === 'done') {
+    if (duration > 60 || log.length > 20 || tripState === 'done') {
       upload(insertTraces, setProcessing, log);
       setLog([]);
     }

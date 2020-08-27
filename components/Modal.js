@@ -46,6 +46,9 @@ export const modelStyles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center"
   },
+  modalTextLeft: {
+    textAlign: "left"
+  },
   modalTitle: {
     fontSize: 24,
     color: '#666',

@@ -4,11 +4,8 @@ import Geolocation from '@react-native-community/geolocation';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import bbox from '@turf/bbox';
 import { lineString } from '@turf/helpers';
+import MapboxPolyline from '@mapbox/polyline'
 import TraceLogger from './TraceLogger';
-
-function pushGeoPosition2Logger(position) {
-  // console.log('2logger:', position);
-}
 
 function mapbound(curr, ODpins) {
   let arr = [];
@@ -49,7 +46,13 @@ function mapbound(curr, ODpins) {
   return region;
 }
 
-export default function Map({ pins, trip }) {
+function polyline2direction(polyline) {
+  if (!polyline) return []
+  return MapboxPolyline.decode(polyline)
+    .map(ltln => ({ latitude: ltln[0], longitude: ltln[1] }))
+}
+
+export default function Map({ pins, trip, handleGeoInfo }) {
   let mapHandler = React.useRef(null);
   let watchID = React.useRef(null);
   const [region, setRegion] = React.useState({
@@ -63,6 +66,7 @@ export default function Map({ pins, trip }) {
   const [geo, setGeo] = React.useState({
     initialPosition: 'unknown',
     lastPosition: 'unknown',
+    error: null
   });
   const { step } = trip
   const isActive = (trip.traces !== undefined && ['done', 'over'].includes(step))
@@ -72,23 +76,31 @@ export default function Map({ pins, trip }) {
     const bootstrapAsync = () => {
       Geolocation.getCurrentPosition(
         position => {
+          console.log('new position: ', position);
           const initialPosition = position;
-          setGeo({ initialPosition, lastPosition: initialPosition });
-          pushGeoPosition2Logger(position, setLog);
+          const x = { initialPosition, lastPosition: initialPosition, error: null }
+          setGeo(x);
+          handleGeoInfo(x)
         },
         error => {
-          // console.log('error: ', JSON.stringify(error));
+          console.log('error: ', JSON.stringify(error));
           // Alert.alert('Error', JSON.stringify(error))
+          const x = { ...geo, error }
+          setGeo(x);
+          handleGeoInfo(x)
         },
         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
       );
       watchID = Geolocation.watchPosition(position => {
         const lastPosition = position;
         // console.log('last position: ', typeof lastPosition, lastPosition);
-        setGeo({ ...geo, lastPosition });
-        pushGeoPosition2Logger(position, position);
+        const x = { ...geo, lastPosition }
+        setGeo(x);
+        handleGeoInfo(x)
       });
     };
+
+    handleGeoInfo(geo)
     if (isActive)
       bootstrapAsync();
 
@@ -114,55 +126,60 @@ export default function Map({ pins, trip }) {
     }
   }, [trip]);
 
-  // console.log('traces: ', traces)
-
   return (
-    <MapView
-      style={styles.map}
-      initialRegion={region}
-      ref={map => {
-        mapHandler = map;
-      }}>
-      {Object.keys(pins).map(k => {
-        if (pins[k].latitude) {
-          return (
-            <Marker
-              key={`p-${k}`}
-              pinColor={k === 'origin' ? 'red' : 'green'}
-              title={pins[k].title}
-              description={k}
-              coordinate={pins[k]}
-            />
-          );
-        }
-      })}
-      {geo.lastPosition !== 'unknown' && (
-        <Marker
-          key={'pin-you'}
-          title={'You'}
-          pinColor={'blue'}
-          description={'Your current position'}
-          coordinate={geo.lastPosition.coords}
-        />
-      )}
-      {traces.length > 0 && <Polyline coordinates={traces}
-        strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-        strokeColors={[
-          '#7F0000',
-          '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
-          '#B24112',
-          '#E5845C',
-          '#238C23',
-          '#7F0000'
-        ]}
-        strokeWidth={2} />}
+    <>
+      <MapView
+        style={styles.map}
+        initialRegion={region}
+        ref={map => {
+          mapHandler = map;
+        }}>
+        {Object.keys(pins).map(k => {
+          if (pins[k].latitude) {
+            return (
+              <Marker
+                key={`p-${k}`}
+                pinColor={k === 'origin' ? 'red' : 'green'}
+                title={pins[k].title}
+                description={k}
+                coordinate={pins[k]}
+              />
+            );
+          }
+        })}
+        {geo.lastPosition !== 'unknown' && (
+          <Marker
+            key={'pin-you'}
+            title={'You'}
+            pinColor={'blue'}
+            description={'Your current position'}
+            coordinate={geo.lastPosition.coords}
+          />
+        )}
+        {traces.length > 0 && <Polyline coordinates={traces}
+          strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+          strokeColors={[
+            '#7F0000',
+            '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+            '#B24112',
+            '#E5845C',
+            '#238C23',
+            '#7F0000'
+          ]}
+          strokeWidth={2} />}
 
-      <TraceLogger
-        tripID={trip.id}
-        tripState={trip.step}
-        position={geo.lastPosition}
-      />
-    </MapView>
+        {/* <GeoIndicator position={geo.lastPosition} error={geo.error} /> */}
+        <TraceLogger
+          tripID={trip.id}
+          tripState={trip.step}
+          position={geo.lastPosition}
+        />
+        {trip.polyline && <Polyline coordinates={polyline2direction(trip.polyline)}
+          strokeWidth={6}
+          strokeColor={"#3333dd88"}
+        />}
+      </MapView>
+    </>
   );
 }
 

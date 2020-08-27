@@ -19,10 +19,13 @@ import DropoffButton from './DropoffButton';
 import FeedbackButton from './FeedbackButton';
 import StopWatch from './StopWatch';
 import Map from './Map';
+import GeoIndicator from './GeoIndicator';
 
 const JOB_SUBSCRIPTION = gql`
   subscription JOB_SUBSCRIPTION($id: Int!) {
-    items: trip(where: {id: {_eq: $id}}) {
+    items: trip(where: {
+      id: {_eq: $id}
+    }) {
       id
       from
       to
@@ -40,6 +43,7 @@ const JOB_SUBSCRIPTION = gql`
       dropped_off_at
       cancelled_at
       driver_feedback
+      polyline
       traces(order_by:{timestamp:desc}) {
         timestamp
         point
@@ -130,9 +134,12 @@ function ItemDisplay(props) {
           <Text style={[styles.txtPrimary, { alignSelf: 'flex-end' }]}>
             {relTime}
           </Text>
-          <Text style={[styles.txtSecondary, { alignSelf: 'flex-end' }]}>
-            At {tmSecondary}
-          </Text>
+          <View style={[styles.flexRow, { alignItems: "baseline" }]}>
+            <Text style={[styles.txtSecondary, { alignSelf: 'flex-end' }]}>
+              At {tmSecondary}
+            </Text>
+            <GeoIndicator error={props.geo.error} position={props.geo.lastPosition} />
+          </View>
         </View>
         <View style={[styles.flexColumn]}>
           <Text style={styles.locationActive}>{from}</Text>
@@ -235,6 +242,11 @@ export default function Job({ route }) {
   });
   const [userData, setUserData] = React.useState(null);
   const [item, setItem] = React.useState({});
+  const [geo, setGeo] = React.useState({
+    initialPosition: 'unknown',
+    lastPosition: 'unknown',
+    error: null
+  });
   const { loading, error, data } = useSubscription(JOB_SUBSCRIPTION, {
     shouldResubscribe: true,
     variables: { id: id },
@@ -285,11 +297,11 @@ export default function Job({ route }) {
 
   return (
     <>
-      <Map pins={pins} trip={item} />
+      <Map pins={pins} trip={item} handleGeoInfo={setGeo} />
       {loading && <ActivityIndicator />}
       {error && <Text>{error.message}</Text>}
       {item && (
-        <ItemDisplay userID={userData ? userData.id : null} item={item} />
+        <ItemDisplay geo={geo} userID={userData ? userData.id : null} item={item} />
       )}
     </>
   );

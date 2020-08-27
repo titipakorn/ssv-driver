@@ -1,13 +1,11 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  Button,
   SafeAreaView,
   StyleSheet,
   Text,
   TextInput,
   TouchableHighlight,
-  View,
 } from 'react-native';
 import { AuthContext } from '../App';
 
