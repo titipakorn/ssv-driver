@@ -13,7 +13,7 @@ import { useQuery } from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 import { AuthContext } from '../App';
 
-const PROFILE_QUERY = gql`
+export const PROFILE_QUERY = gql`
   query PROFILE_QUERY($userId: uuid) {
     user(where: {id: {_eq: $userId}}) {
       username
@@ -22,7 +22,7 @@ const PROFILE_QUERY = gql`
   }
 `;
 
-export default function Profile({ navigation }) {
+export default function Profile() {
   const { signOut } = React.useContext(AuthContext);
   const [user, setUser] = React.useState(null);
   const { loading, error, data } = useQuery(PROFILE_QUERY, {

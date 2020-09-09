@@ -44,6 +44,7 @@ async function upload(fn, fnLoading, objs) {
 }
 
 export default function TraceLogger({ tripID, tripState, position }) {
+  const [hasUploaded, setUploaded] = React.useState(false)
   const [log, setLog] = React.useState([]);
   const [tmsp, setTmsp] = React.useState(null);
   const [processing, setProcessing] = React.useState(false);
@@ -60,6 +61,14 @@ export default function TraceLogger({ tripID, tripState, position }) {
   React.useEffect(() => {
     // console.log('log changed');
     if (log.length === 0) return;
+    if (!hasUploaded) {
+      // first one will be uploaded w/o any wait
+      upload(insertTraces, setProcessing, log);
+      setLog([]);
+      setUploaded(true);
+      return
+    }
+
     const duration = (dayjs() - dayjs(log[0].timestamp)) / 1000;
     // console.log(
     //   '  >> duration ',
@@ -77,6 +86,13 @@ export default function TraceLogger({ tripID, tripState, position }) {
 
   React.useEffect(() => {
     // Don't log anything incomplete
+    /* STEP:
+    X 1. wait
+    / 2. accept
+    / 3. onboard
+    X 4. done [wait for feedback]
+    X 5. over
+    */
     if (tripID == undefined) return;
     if (tripState == undefined) return;
     if (position === 'unknown') return;
@@ -107,7 +123,7 @@ export default function TraceLogger({ tripID, tripState, position }) {
 
   return (
     <View>
-      <Text style={styles.overlay}>{log.length}</Text>
+      <Text style={styles.overlay}>{hasUploaded && '..'}{log.length}</Text>
       {loading && processing && <ActivityIndicator />}
     </View>
   );

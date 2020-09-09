@@ -69,7 +69,7 @@ export default function Map({ pins, trip, handleGeoInfo }) {
     error: null
   });
   const { step } = trip
-  const isActive = (trip.traces !== undefined && ['done', 'over'].includes(step))
+  const isActive = (trip.traces !== undefined && !['done', 'over'].includes(step))
 
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place

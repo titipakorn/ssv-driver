@@ -1,5 +1,5 @@
 import React from 'react';
-import { ActivityIndicator, Modal, TouchableOpacity, TouchableHighlight, View, StyleSheet, Text } from 'react-native';
+import { ActivityIndicator, Modal, TouchableOpacity, TouchableHighlight, View, Text } from 'react-native';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import Icon from 'react-native-vector-icons/Ionicons';
