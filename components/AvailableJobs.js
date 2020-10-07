@@ -11,6 +11,7 @@ import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
 import { useSubscription } from '@apollo/react-hooks';
 import { relativeTime, displayTime, getToday } from '../libs/day';
+import { useNavigation } from '@react-navigation/native';
 
 const QUEUE_SUBSCRIPTION = gql`
   subscription QUEUE_SUBSCRIPTION($userId: uuid, $day: timestamptz) {
@@ -40,7 +41,8 @@ const QUEUE_SUBSCRIPTION = gql`
 `;
 
 function Item(row) {
-  const { navigation, id, from, to, tmPrimary, tmSecondary, cancelled_at, driver_id, userID } = row;
+  const navigation = useNavigation()
+  const { id, from, to, tmPrimary, tmSecondary, cancelled_at, driver_id, userID } = row;
   let relTime = tmPrimary;
   if (cancelled_at !== null) {
     relTime = 'Cancelled';
@@ -48,8 +50,12 @@ function Item(row) {
     relTime = 'Anytime now';
   }
   const isMyJob = driver_id === userID
+  const taken = driver_id !== null && !isMyJob
   let MyJobStyle = {}
   if (isMyJob) MyJobStyle = { backgroundColor: '#35fcd733' }
+
+  // TODO: recalculate time..
+
   return (
     <TouchableHighlight
       activeOpacity={0.8}
@@ -64,7 +70,10 @@ function Item(row) {
       <View style={[styles.flexRow]}>
         {from !== null && (
           <View style={[styles.flexColumn, { flex: 1 }]}>
-            <Text style={styles.locationPickup}>{from}</Text>
+            <Text style={styles.locationPickup}>
+              {taken ? '/taken/' : ''}
+              {from}
+            </Text>
             <Text style={styles.locationDestination}>→ {to}</Text>
           </View>
         )}
@@ -90,7 +99,7 @@ function itemProcess(data) {
   }));
 }
 
-export default function AvailableJobs({ navigation }) {
+export default function AvailableJobs() {
   let intval = React.useRef(null);
   const [user, setUser] = React.useState(null);
   const [items, setItems] = React.useState([]);
@@ -146,7 +155,6 @@ export default function AvailableJobs({ navigation }) {
           <Item
             {...item}
             userID={user ? user.id : null}
-            navigation={navigation}
           // selected={!selected.get(item.id)}
           // onSelect={onSelect}
           />

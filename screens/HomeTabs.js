@@ -1,11 +1,10 @@
 import React from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {createStackNavigator} from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
-import Profile from '../components/Profile';
 import AvailableJobs from '../components/AvailableJobs';
 import Job from '../components/Job';
-import JobHistory from '../components/JobHistory';
+import UserScreen from './UserScreen';
 
 const Tab = createBottomTabNavigator();
 const MainStack = createStackNavigator();
@@ -33,28 +32,19 @@ export function IndexScreen() {
     </MainStack.Navigator>
   );
 }
-/*     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Available Jobs</Text>
-      <AvailableJobs />
-    <Button title="Sign out" onPress={signOut} />
-      <Button
-        title="Go to Jane's profile"
-        onPress={() => navigation.navigate('Profile', {name: 'Jane'})}
-      />
-    </SafeAreaView>*/
 
 export default function HomeTabs() {
   return (
     <Tab.Navigator
-      screenOptions={({route}) => ({
+      screenOptions={({ route }) => ({
         headerShown: true,
-        tabBarIcon: ({focused, color, size}) => {
+        tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === 'Home') {
             iconName = focused ? 'ios-car' : 'ios-filing';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'ios-contact' : 'ios-contact';
-          } else if (route.name === 'History') {
+          } else if (route.name === 'User') {
             iconName = focused ? 'ios-list' : 'ios-list';
           }
           // You can return any component that you like here!
@@ -66,8 +56,7 @@ export default function HomeTabs() {
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="Home" component={IndexScreen} />
-      <Tab.Screen name="History" component={JobHistory} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="User" component={UserScreen} />
     </Tab.Navigator>
   );
 }

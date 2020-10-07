@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Rating } from 'react-native-ratings';
 import { displayDatetime, minDuration } from '../libs/day';
+import { useNavigation } from '@react-navigation/native';
 
 export const JOB_HISTORY_QUERY = gql`
   query JOB_HISTORY_QUERY($userId: uuid) {
@@ -44,7 +45,6 @@ export const JOB_HISTORY_QUERY = gql`
 
 function Item(row) {
   const {
-    navigation,
     id,
     from,
     to,
@@ -54,6 +54,7 @@ function Item(row) {
     dropped_off_at,
     driver_feedback,
   } = row;
+  const navigation = useNavigation()
   const duration = minDuration(accepted_at || picked_up_at, dropped_off_at);
   // console.log('driver_feedback: #', id, ' = ', driver_feedback, driver_feedback !== null)
   return (
@@ -107,7 +108,7 @@ function Item(row) {
   );
 }
 
-export default function JobHistory({ navigation }) {
+export default function JobHistory() {
   const [selected, setSelected] = React.useState(new Map());
   const [user, setUser] = React.useState(null);
   const { loading, error, data } = useQuery(JOB_HISTORY_QUERY, {
@@ -141,7 +142,6 @@ export default function JobHistory({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Job History</Text>
       {loading && <ActivityIndicator />}
       {error && <Text>{error.message}</Text>}
       {data && (
@@ -150,12 +150,16 @@ export default function JobHistory({ navigation }) {
           renderItem={({ item }) => (
             <Item
               {...item}
-              navigation={navigation}
               selected={!selected.get(item.id)}
               onSelect={onSelect}
             />
           )}
           keyExtractor={item => `${item.id}`}
+          ListEmptyComponent={() => (
+            <Text style={{ textAlign: 'center', paddingVertical: 20 }}>
+              No job at the moment, Yay!
+            </Text>
+          )}
         />
       )}
     </SafeAreaView>
