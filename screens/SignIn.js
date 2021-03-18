@@ -12,7 +12,7 @@ import { AuthContext } from '../App';
 
 async function login({ username, password }) {
   try {
-    let resp = await fetch('https://rest.10z.dev/login', {
+    let resp = await fetch('https://ssv-one.10z.dev/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',

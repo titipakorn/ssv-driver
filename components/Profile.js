@@ -59,7 +59,10 @@ export default function Profile() {
 
   const u = data ? data.user[0] : null;
   const jobTotal = data ? data.jobs.aggregate.count : 0;
+  if (error) {
+    console.log('[Profile] Error', error)
 
+  }
   return (
     <SafeAreaView>
       <View style={styles.Ops}>
@@ -68,7 +71,7 @@ export default function Profile() {
         </TouchableHighlight>
       </View>
       {loading && <ActivityIndicator />}
-      {error && <Text>{error}</Text>}
+      {/* {error && <Text>{error}</Text>} */}
       <View style={styles.content}>
         <Text style={styles.header}>Information</Text>
 

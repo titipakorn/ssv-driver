@@ -83,7 +83,7 @@ const App = () => {
           AsyncStorage.setItem('userResp', JSON.stringify(data));
           dispatch({ type: 'SIGN_IN', token: data.token });
         }
-        // console.log('data == > ', data)
+        //console.log('data == > ', data)
       },
       signOut: async () => {
         if (Platform.OS === 'android') {

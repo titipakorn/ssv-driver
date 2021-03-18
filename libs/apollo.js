@@ -8,16 +8,17 @@ import {onError} from 'apollo-link-error';
 import {split} from 'apollo-link';
 import {getMainDefinition} from 'apollo-utilities';
 
-const httpLink = new HttpLink({uri: 'https://gql.10z.dev/v1/graphql'});
+const httpLink = new HttpLink({uri: 'https://ssv-one.10z.dev/v1/graphql'});
 
 // Create a WebSocket link:
 const wsLink = new WebSocketLink({
-  uri: 'wss://gql.10z.dev/v1/graphql',
+  uri: 'wss://ssv-one.10z.dev/v1/graphql',
   options: {
     lazy: true,
     reconnect: true,
     connectionParams: async () => {
       const token = await AsyncStorage.getItem('userToken');
+      //console.log('wslink token', token)
       return {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -40,6 +41,7 @@ const withToken = setContext(async request => {
     'X-Hasura-User-Id': username,
     'X-Hasura-Role': roles.length > 0 ? roles[0] : '',
   };
+  //console.log('withToken', headers)
   return {headers};
 });
 

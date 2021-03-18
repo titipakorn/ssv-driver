@@ -19,6 +19,7 @@ const QUEUE_SUBSCRIPTION = gql`
       where: {
         _and: [
           {cancelled_at: {_is_null: true}}
+          {picked_up_at: {_is_null: true}}
           {dropped_off_at: {_is_null: true}}
           {reserved_at: {_gte: $day}}
           {_or: [{driver_id: null}, {driver_id: {_eq: $userId}}]}
@@ -103,11 +104,12 @@ export default function AvailableJobs() {
   let intval = React.useRef(null);
   const [user, setUser] = React.useState(null);
   const [items, setItems] = React.useState([]);
+  const [tm, setTm] = React.useState(getToday());
   // const [selected, setSelected] = React.useState(new Map());
   const { loading, error, data } = useSubscription(QUEUE_SUBSCRIPTION, {
     shouldResubscribe: true,
     skip: user == null,
-    variables: { userId: user ? user.id : null, day: getToday() },
+    variables: { userId: user ? user.id : null, day: tm },
   });
   /* const onSelect = React.useCallback(
     id => {
@@ -118,6 +120,14 @@ export default function AvailableJobs() {
     },
     [selected],
   ); */
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+	setTm(getToday());
+        console.log('setTm: ', tm);
+    }, 5000);
+    // clearing interval
+    return () => clearInterval(timer);
+  });
 
   React.useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
