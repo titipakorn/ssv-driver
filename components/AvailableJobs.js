@@ -12,6 +12,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { useSubscription } from '@apollo/react-hooks';
 import { relativeTime, displayTime, getToday } from '../libs/day';
 import { useNavigation } from '@react-navigation/native';
+import { useKeepAwake } from 'expo-keep-awake';
 
 const QUEUE_SUBSCRIPTION = gql`
   subscription QUEUE_SUBSCRIPTION($userId: uuid, $day: timestamptz) {
@@ -122,8 +123,8 @@ export default function AvailableJobs() {
   ); */
   React.useEffect(() => {
     const timer = setInterval(() => {
-	setTm(getToday());
-        console.log('setTm: ', tm);
+      setTm(getToday());
+      // console.log('setTm: ', tm);
     }, 5000);
     // clearing interval
     return () => clearInterval(timer);
@@ -154,6 +155,8 @@ export default function AvailableJobs() {
       return () => clearInterval(intval);
     }
   }, [data]);
+
+  useKeepAwake()
 
   // console.log('available jobs: ', error)
   return (

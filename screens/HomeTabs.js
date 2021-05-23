@@ -41,7 +41,7 @@ export default function HomeTabs() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
           if (route.name === 'Home') {
-            iconName = focused ? 'ios-car' : 'ios-filing';
+            iconName = focused ? 'ios-car' : 'ios-car';
           } else if (route.name === 'Profile') {
             iconName = focused ? 'ios-contact' : 'ios-contact';
           } else if (route.name === 'User') {
