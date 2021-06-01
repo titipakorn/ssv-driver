@@ -22,8 +22,20 @@ export const relativeTime = dayStr => {
 };
 export const displayDatetime = dayStr =>
   dayjs(dayStr).format('MMMM DD, YYYY HH:mm');
+
 export const minDuration = (d1, d2) => {
   const diff = (dayjs(d2) - dayjs(d1)) / 1000;
   return Math.floor(diff / 60); // min
 };
+
+export const hhmmDuration = (d1, d2) => {
+  const diff = (dayjs(d2) - dayjs(d1)) / 1000;
+  let hour = Math.floor(diff / 3600); // hour
+  let min = Math.floor((diff - hour * 3600)/60)
+  let sec = Math.floor((diff - hour * 3600 - min* 60))
+  const minText = min > 9 ? min : `0${min.toFixed(0)}`;
+  const secText = sec > 9 ? sec : `0${sec.toFixed(0)}`;
+  return `${hour}:${minText}:${secText}`
+}
+
 export const getToday = () => dayjs().subtract(3, 'hour').format('YYYY-MM-DDTHH:mm:ssZ');
