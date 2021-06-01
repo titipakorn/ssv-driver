@@ -19,8 +19,7 @@ target 'TaxiDriverApp' do
   #
   # Note that if you have use_frameworks! enabled, Flipper will not work and
   # you should disable these next few lines.
-  use_flipper!({ 'Flipper-Folly' => '2.5.0' }) # update this part
-  # add_flipper_pods!
+  use_flipper!({ 'Flipper-Folly' => '2.5.3' }) # update this part
   post_install do |installer|
     # delete IPHONEOS_DEPLOYMENT_TARGET for pods (using the main one)
     # installer.pods_project.targets.each do |target|
