@@ -1,28 +1,52 @@
-import {useMutation} from '@apollo/react-hooks';
+import { useMutation, useSubscription } from '@apollo/react-hooks';
+import dayjs from 'dayjs';
 import gql from 'graphql-tag';
-import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Icon} from 'react-native-elements';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { hhmmDuration } from '../libs/day';
 
+const GREEN = 'rgba(68, 252, 148, 0.3)';
 const YELLOW = 'rgba(252, 186, 3, 0.5)';
 const RED = 'rgba(249, 88, 67, 0.5)';
 
-export default function JobOverlay({isWorking, setWorking}) {
-  const [shiftID, setShiftID] = useState(localStorage.getItem('shiftID'));
+export default function JobOverlay({ isWorking, setWorking }) {
+  const { data, loading } = useSubscription(ACTIVE_WORKING_SHIFT)
+  const [shiftID, setShiftID] = useState(-1)
+  const [shiftDuration, setShiftDuration] = useState('')
   const [
     startWorking,
-    {loading: startLoading, error: startError},
+    { loading: startLoading, error: startError },
   ] = useMutation(START_WORKING_MUTATION);
-  const [endWorking, {loading: endLoading, error: endError}] = useMutation(
+  const [endWorking, { loading: endLoading, error: endError }] = useMutation(
     END_WORKING_MUTATION,
   );
   const [
     updateWorking,
-    {loading: updateLoading, error: updateError},
+    { loading: updateLoading, error: updateError },
   ] = useMutation(UPDATE_WORKING_MUTATION);
 
-  console.log('shiftID: ', shiftID);
+  useEffect(() => {
+    if (loading) return
+    if (data.working_shift.length > 0) {
+      setWorking(true);
+      const item = data.working_shift[0]
+      setShiftID(item.id)
+    }
+  }, [data, loading])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (shiftID > -1 && !loading && data.working_shift.length > 0) {
+        const start = dayjs(data.working_shift[0].start)
+        setShiftDuration(hhmmDuration(start, dayjs()))
+      }
+    }, 1000);
+    // clearing interval
+    return () => clearInterval(timer);
+  });
+
   return (
     <View style={styles.container}>
       {!isWorking && (
@@ -44,8 +68,11 @@ export default function JobOverlay({isWorking, setWorking}) {
                 alignItems: 'center',
               }}
               onPress={async () => {
-                const res = await startWorking({vehicleID: 1});
+                const variables = { vehicleID: 1 }
+                const res = await startWorking({ variables });
                 console.log('start working: ', res);
+                const { id } = res.data.insert_working_shift_one
+                setShiftID(id)
                 setWorking(true);
               }}>
               <Text>Start working</Text>
@@ -53,27 +80,49 @@ export default function JobOverlay({isWorking, setWorking}) {
           </View>
         </View>
       )}
-      {isWorking && (
-        <Icon
-          raised
-          name="pause-outline"
-          type="ionicon"
-          containerStyle={{backgroundColor: '#000000'}}
-          onPress={async () => {
-            const variables = {
-              ID: shiftID,
-            };
-            const res = await endWorking({variables});
-            console.log('end working: ', res);
-            setWorking(false);
-          }}
-        />
+      {isWorking && shiftID > -1 && (
+        <>
+          <Text style={styles.timer}>
+            {shiftDuration}
+          </Text>
+          <Icon
+            raised
+            name="pause-outline"
+            type="ionicon"
+            containerStyle={{ backgroundColor: '#000000' }}
+            onPress={async () => {
+              const variables = {
+                ID: shiftID,
+                timestamp: dayjs().format(),
+              };
+              const res = await endWorking({ variables });
+              console.log('end working: ', res);
+              setShiftID(-1)
+              setShiftDuration('')
+              setWorking(false);
+            }}
+          />
+        </>
       )}
-      <View style={{width: 10}} />
+      <View style={{ width: 10 }} />
     </View>
   );
 }
 ``;
+
+const ACTIVE_WORKING_SHIFT = gql`
+subscription ACTIVE_WORKING_SHIFT {
+  working_shift(where:{
+    end: {_is_null:true}
+  }) {
+    id
+    start
+    vehicle_id
+  }
+}
+`
+
+
 const START_WORKING_MUTATION = gql`
   mutation START_WORKING_MUTATION($vehicleID: Int) {
     insert_working_shift_one(object: {vehicle_id: $vehicleID}) {
@@ -86,9 +135,11 @@ const UPDATE_WORKING_MUTATION = gql`
   mutation UPDATE_WORKING_MUTATION($ID: bigint!, $point: geometry!, $timestamp: timestamptz!) {
   update_working_shift_by_pk(
     pk_columns: {id: $ID},
-    _set: {point: $point, latest_timestamp: $timestamp}) {
+    _set: {point: $point, latest_timestamp: $timestamp}
+    ) {
     id
   }
+}
 `;
 
 const END_WORKING_MUTATION = gql`
@@ -98,6 +149,7 @@ const END_WORKING_MUTATION = gql`
     _set: {end: $timestamp}) {
     id
   }
+}
 `;
 
 const styles = StyleSheet.create({
@@ -132,5 +184,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  timer: {
+    borderRadius: 10,
+    backgroundColor: GREEN,
+    paddingVertical: 4,
+    paddingHorizontal: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'right',
   },
 });

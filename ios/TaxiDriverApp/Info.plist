@@ -2,12 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Photos used to confirm if the driver works as intended besides the actions on the app.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Camera is needed to capture a photo to use as a confirmation of the driver&apos;s work</string>
 	<key>CFBundleDisplayName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleExecutable</key>
@@ -41,10 +37,14 @@
 			</dict>
 		</dict>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Camera is needed to capture a photo to use as a confirmation of the driver's work</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app requires to get your location in order to calculate how long the trip is going to take and show to customer.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app requires to get your location in order to calculate how long the trip is going to take and show to customer.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photos used to confirm if the driver works as intended besides the actions on the app.</string>
 	<key>UIAppFonts</key>
 	<array/>
 	<key>UILaunchStoryboardName</key>

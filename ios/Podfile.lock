@@ -630,7 +630,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
-  DoubleConversion: 5805e889d232975c086db112ece9ed034df7a0b2
+  DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   EXConstants: c00cd53a17a65b2e53ddb3890e4e74d3418e406e
   EXFileSystem: 35769beb727d5341d1276fd222710f9704f7164e
   EXImageLoader: 1ad8b491fd0f3200b57b37ecb1801abeb6549926
@@ -645,7 +645,7 @@ SPEC CHECKSUMS:
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
   Flipper-RSocket: 127954abe8b162fcaf68d2134d34dc2bd7076154
   FlipperKit: 8a20b5c5fcf9436cac58551dc049867247f64b00
-  glog: 1f3da668190260b06b429bb211bfbee5cd790c28
+  glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
