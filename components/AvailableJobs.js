@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,6 +13,8 @@ import { useSubscription } from '@apollo/react-hooks';
 import { relativeTime, displayTime, getToday } from '../libs/day';
 import { useNavigation } from '@react-navigation/native';
 import { useKeepAwake } from 'expo-keep-awake';
+import OverlayComponent from './OverlayComponent';
+import JobOverlay from './JobOverly';
 
 const QUEUE_SUBSCRIPTION = gql`
   subscription QUEUE_SUBSCRIPTION($userId: uuid, $day: timestamptz) {
@@ -101,15 +103,15 @@ function itemProcess(data) {
   }));
 }
 
-export default function AvailableJobs() {
+function AvailableJobs({ isWorking }) {
   let intval = React.useRef(null);
   const [user, setUser] = React.useState(null);
   const [items, setItems] = React.useState([]);
   const [tm, setTm] = React.useState(getToday());
   // const [selected, setSelected] = React.useState(new Map());
   const { loading, error, data } = useSubscription(QUEUE_SUBSCRIPTION, {
-    shouldResubscribe: true,
-    skip: user == null,
+    shouldResubscribe: isWorking,
+    skip: !isWorking || user == null,
     variables: { userId: user ? user.id : null, day: tm },
   });
   /* const onSelect = React.useCallback(
@@ -146,21 +148,38 @@ export default function AvailableJobs() {
 
   React.useEffect(() => {
     clearInterval(intval);
-    if (data && data.items.length > 0) {
-      setItems(itemProcess(data));
-      // need to force re-render time although no update data
-      intval = setInterval(() => {
+    if (!loading && data && data.items) {
+
+      if (data.items.length === 0) {
+        setItems([])
+      } else {
         setItems(itemProcess(data));
-      }, 5000);
+        // need to force re-render time although no update data
+        intval = setInterval(() => {
+          setItems(itemProcess(data));
+        }, 5000);
+      }
       return () => clearInterval(intval);
     }
   }, [data]);
 
+  useEffect(() => {
+    if (!isWorking) {
+      setItems([])
+    }
+  }, [isWorking])
+
   useKeepAwake()
+
+  const emptyText = isWorking ? 'No job at the moment, Yay!' : 'This feed is not live yet'
 
   // console.log('available jobs: ', error)
   return (
-    <>
+    <View
+      style={{
+        width: '100%',
+        height: '100%',
+      }}>
       {error && <Text>{error.message}</Text>}
       <FlatList
         data={items}
@@ -175,14 +194,24 @@ export default function AvailableJobs() {
         keyExtractor={item => `${item.id}`}
         ListEmptyComponent={() => (
           <Text style={{ textAlign: 'center', paddingVertical: 20 }}>
-            No job at the moment, Yay!
+            {emptyText}
           </Text>
         )}
       />
       {loading && <ActivityIndicator style={{ marginVertical: 20 }} />}
-    </>
+    </View>
   );
 }
+
+
+export default function AvailableJobsContainer() {
+  const [working, setWorking] = useState(false)
+  return <OverlayComponent
+    behind={<AvailableJobs isWorking={working} />}
+    front={<JobOverlay isWorking={working} setWorking={setWorking} />}
+  />
+}
+
 
 const styles = StyleSheet.create({
   container: {
