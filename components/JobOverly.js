@@ -1,19 +1,31 @@
-import { useNavigation } from '@react-navigation/core';
-import React, { useState, useEffect, useCallback } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { Icon } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {useMutation} from '@apollo/react-hooks';
+import gql from 'graphql-tag';
+import React, {useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {Icon} from 'react-native-elements';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const YELLOW = 'rgba(252, 186, 3, 0.5)';
 const RED = 'rgba(249, 88, 67, 0.5)';
 
-export default function JobOverlay({
-  isWorking, setWorking
-}) {
+export default function JobOverlay({isWorking, setWorking}) {
+  const [shiftID, setShiftID] = useState(localStorage.getItem('shiftID'));
+  const [
+    startWorking,
+    {loading: startLoading, error: startError},
+  ] = useMutation(START_WORKING_MUTATION);
+  const [endWorking, {loading: endLoading, error: endError}] = useMutation(
+    END_WORKING_MUTATION,
+  );
+  const [
+    updateWorking,
+    {loading: updateLoading, error: updateError},
+  ] = useMutation(UPDATE_WORKING_MUTATION);
 
+  console.log('shiftID: ', shiftID);
   return (
     <View style={styles.container}>
-      {!isWorking &&
+      {!isWorking && (
         <View
           style={[
             styles.rowFlex,
@@ -31,30 +43,62 @@ export default function JobOverlay({
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
-              onPress={() => {
-                setWorking(true)
+              onPress={async () => {
+                const res = await startWorking({vehicleID: 1});
+                console.log('start working: ', res);
+                setWorking(true);
               }}>
-              <Text>
-                Start working
-                </Text>
+              <Text>Start working</Text>
             </TouchableOpacity>
           </View>
-        </View>}
-      {isWorking &&
+        </View>
+      )}
+      {isWorking && (
         <Icon
           raised
           name="pause-outline"
           type="ionicon"
-          containerStyle={{ backgroundColor: '#000000' }}
-          onPress={() => {
-            setWorking(false)
+          containerStyle={{backgroundColor: '#000000'}}
+          onPress={async () => {
+            const variables = {
+              ID: shiftID,
+            };
+            const res = await endWorking({variables});
+            console.log('end working: ', res);
+            setWorking(false);
           }}
         />
-      }
-      <View style={{ width: 10 }}></View>
+      )}
+      <View style={{width: 10}} />
     </View>
   );
 }
+``;
+const START_WORKING_MUTATION = gql`
+  mutation START_WORKING_MUTATION($vehicleID: Int) {
+    insert_working_shift_one(object: {vehicle_id: $vehicleID}) {
+      id
+    }
+  }
+`;
+
+const UPDATE_WORKING_MUTATION = gql`
+  mutation UPDATE_WORKING_MUTATION($ID: bigint!, $point: geometry!, $timestamp: timestamptz!) {
+  update_working_shift_by_pk(
+    pk_columns: {id: $ID},
+    _set: {point: $point, latest_timestamp: $timestamp}) {
+    id
+  }
+`;
+
+const END_WORKING_MUTATION = gql`
+  mutation END_WORKING_MUTATION($ID: bigint!, $timestamp: timestamptz!) {
+  update_working_shift_by_pk(
+    pk_columns: {id: $ID},
+    _set: {end: $timestamp}) {
+    id
+  }
+`;
 
 const styles = StyleSheet.create({
   container: {
