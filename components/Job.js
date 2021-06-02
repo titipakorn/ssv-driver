@@ -1,10 +1,7 @@
 import React from 'react';
 import {
   ActivityIndicator,
-  Alert,
-  Image,
   StyleSheet,
-  TouchableOpacity,
   Text,
   View,
 } from 'react-native';
@@ -158,7 +155,7 @@ function ItemDisplay(props) {
           </Text>
         )}
       </View>
-      <View
+      {/* <View
         style={{
           marginVertical: 20,
           flexDirection: 'row',
@@ -192,7 +189,7 @@ function ItemDisplay(props) {
             source={require('../static/phone.png')}
           />
         </TouchableOpacity>
-      </View>
+      </View> */}
       {/* can start job only now and future job */}
       {currStep === 'wait' && cancelled_at === null && (
         <AcceptJobButton jobID={id} userID={userID} />

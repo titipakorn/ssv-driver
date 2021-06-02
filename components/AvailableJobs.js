@@ -22,10 +22,12 @@ const QUEUE_SUBSCRIPTION = gql`
       where: {
         _and: [
           {cancelled_at: {_is_null: true}}
-          {picked_up_at: {_is_null: true}}
           {dropped_off_at: {_is_null: true}}
           {reserved_at: {_gte: $day}}
-          {_or: [{driver_id: null}, {driver_id: {_eq: $userId}}]}
+          {_or: [
+            {driver_id: null},
+            {driver_id: {_eq: $userId}}
+          ]}
         ]
       }
       order_by: {reserved_at: desc}
