@@ -1,19 +1,20 @@
 import dayjs from 'dayjs';
 import calendar from 'dayjs/plugin/calendar';
+import { useTranslation } from 'react-i18next';
 dayjs.extend(calendar);
 
 export const bkkTime = dayStr => dayjs(dayStr).calendar();
 export const displayTime = dayStr => dayjs(dayStr).format('HH:mm');
-export const relativeTime = dayStr => {
+export const relativeTime = (dayStr, t) => {
   const now = dayjs();
   const target = dayjs(dayStr);
   const diff = (target - now) / 1000;
   if (diff < 0) {
-    return 'Passed';
+    return t('job.Passed');
   }
   const min = diff / 60;
   if (min <= 60) {
-    return `${min.toFixed(0)} min`;
+    return `${min.toFixed(0)} ${t('time.MinuteAbbr')}`;
   }
   const hr = Math.floor(min / 60);
   const leftoverMin = Math.floor(min % 60);

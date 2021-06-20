@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   map: {
-    height: 275,
+    height: 240,
     marginVertical: 0,
   },
 });

@@ -1,7 +1,6 @@
 import React from 'react';
-import { ActivityIndicator, Button, View } from 'react-native'
-import { createStackNavigator } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+import {useTranslation} from 'react-i18next';
 import Profile from '../components/Profile';
 import JobHistory from '../components/JobHistory';
 
@@ -14,14 +13,14 @@ export default function UserScreen() {
         headerShown: true,
       }}>
       <UserStack.Screen
-        name="Profile"
+        name={'Profile'}
         component={Profile}
         options={{
           animationEnabled: true,
         }}
       />
       <UserStack.Screen
-        name="JobHistory"
+        name={'JobHistory'}
         component={JobHistory}
         options={{
           animationEnabled: true,

@@ -11,21 +11,11 @@ import gql from 'graphql-tag';
 import {useMutation} from '@apollo/react-hooks';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {modelStyles} from './Modal';
-
-const PICKUP_TASK_MUTATION = gql`
-  mutation PICKUP_TASK_MUTATION($jobID: Int!, $now: timestamptz!) {
-    update_trip(where: {id: {_eq: $jobID}}, _set: {picked_up_at: $now}) {
-      affected_rows
-      returning {
-        id
-        picked_up_at
-      }
-    }
-  }
-`;
+import {useTranslation} from 'react-i18next';
 
 export default function PickupButton({jobID}) {
   let handler = React.useRef(null);
+  const {t} = useTranslation();
   const [image, setImage] = React.useState(null);
   const [modalVisible, setModalVisible] = React.useState(false);
   const [processing, setProcessing] = React.useState(false);
@@ -39,7 +29,7 @@ export default function PickupButton({jobID}) {
           fontSize: 36,
         },
       ]}>
-      PICK UP
+      {t('job.PickUpButtonLabel')}
     </Text>
   );
   if (loading) {
@@ -75,7 +65,7 @@ export default function PickupButton({jobID}) {
       cropperActiveWidgetColor: 'white',
       cropperToolbarWidgetColor: '#3498DB',
     })
-      .then(image => {
+      .then((image) => {
         console.log('received image', image);
         setImage({
           uri: image.path,
@@ -84,7 +74,7 @@ export default function PickupButton({jobID}) {
           mime: image.mime,
         });
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
         Alert.alert(e.message ? e.message : e);
       });
@@ -107,7 +97,7 @@ export default function PickupButton({jobID}) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert('Modal has been closed.');
+          // Alert.alert('Modal has been closed.');
         }}>
         <View style={modelStyles.centeredView}>
           <View style={modelStyles.modalView}>
@@ -119,16 +109,9 @@ export default function PickupButton({jobID}) {
                 <Icon name="ios-close" size={50} color={'#aaa'} />
               </TouchableOpacity>
             </View>
-            <Text style={modelStyles.modalTitle}>Pick up your customer?</Text>
-            <TouchableHighlight
-              style={{
-                ...modelStyles.openButton,
-                marginTop: 30,
-                backgroundColor: '#2196F3',
-              }}
-              onPress={() => pickSingle(true)}>
-              <Text style={modelStyles.textStyle}>Camera</Text>
-            </TouchableHighlight>
+            <Text style={modelStyles.modalTitle}>
+              {t('job.PickUpQuestion')}
+            </Text>
             <TouchableHighlight
               style={{
                 ...modelStyles.openButton,
@@ -144,15 +127,15 @@ export default function PickupButton({jobID}) {
                 pickup({
                   variables,
                 })
-                  .then(res => {
+                  .then((res) => {
                     // console.log('done: accepting job', res);
                     // console.log(res.data.update_trip.returning);
                   })
-                  .catch(err => {
+                  .catch((err) => {
                     // console.log('err: ', err);
                   });
               }}>
-              <Text style={modelStyles.textStyle}>Confirm</Text>
+              <Text style={modelStyles.textStyle}>{t('modal.Confirm')}</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -173,3 +156,15 @@ export default function PickupButton({jobID}) {
     </>
   );
 }
+
+const PICKUP_TASK_MUTATION = gql`
+  mutation PICKUP_TASK_MUTATION($jobID: Int!, $now: timestamptz!) {
+    update_trip(where: {id: {_eq: $jobID}}, _set: {picked_up_at: $now}) {
+      affected_rows
+      returning {
+        id
+        picked_up_at
+      }
+    }
+  }
+`;

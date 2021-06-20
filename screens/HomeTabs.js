@@ -1,29 +1,31 @@
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import {createStackNavigator} from '@react-navigation/stack';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AvailableJobs from '../components/AvailableJobs';
 import Job from '../components/Job';
 import UserScreen from './UserScreen';
+import {useTranslation} from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 const MainStack = createStackNavigator();
 
 export function IndexScreen() {
+  const {t} = useTranslation();
   return (
     <MainStack.Navigator
       screenOptions={{
         headerShown: true,
       }}>
       <MainStack.Screen
-        name="Job queue"
+        name={t('jobList.Title')}
         component={AvailableJobs}
         options={{
           animationEnabled: true,
         }}
       />
       <MainStack.Screen
-        name="Job"
+        name={t('job.Title')}
         component={Job}
         options={{
           animationEnabled: true,
@@ -36,9 +38,9 @@ export function IndexScreen() {
 export default function HomeTabs() {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({route}) => ({
         headerShown: true,
-        tabBarIcon: ({ focused, color, size }) => {
+        tabBarIcon: ({focused, color, size}) => {
           let iconName;
           if (route.name === 'Home') {
             iconName = focused ? 'ios-car' : 'ios-car';

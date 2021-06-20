@@ -1,11 +1,20 @@
 import React from 'react';
-import { ActivityIndicator, Modal, TouchableHighlight, TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Modal,
+  TouchableHighlight,
+  TouchableOpacity,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import gql from 'graphql-tag';
-import { useMutation } from '@apollo/react-hooks';
-import { AirbnbRating } from 'react-native-ratings';
-import { JOB_HISTORY_QUERY } from './JobHistory'
+import {useMutation} from '@apollo/react-hooks';
+import {AirbnbRating} from 'react-native-ratings';
+import {JOB_HISTORY_QUERY} from './JobHistory';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { modelStyles } from './Modal'
+import {modelStyles} from './Modal';
+import {useTranslation} from 'react-i18next';
 
 const UPDATE_FEEDBACK_MUTATION = gql`
   mutation UPDATE_FEEDBACK_MUTATION($jobID: Int!, $rating: smallint!) {
@@ -15,18 +24,22 @@ const UPDATE_FEEDBACK_MUTATION = gql`
   }
 `;
 // TODO: implement this feedback feature
-export default function FeedbackButton({ jobID, userID }) {
-  const [rating, setRating] = React.useState(3)
+export default function FeedbackButton({jobID, userID}) {
+  const [rating, setRating] = React.useState(3);
+  const {t} = useTranslation();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [processing, setProcessing] = React.useState(false);
-  const [update_feedack, { loading, error }] = useMutation(UPDATE_FEEDBACK_MUTATION, {
-    refetchQueries: [
-      {
-        query: JOB_HISTORY_QUERY,
-        variables: { userId: userID }
-      }
-    ]
-  });
+  const [update_feedack, {loading, error}] = useMutation(
+    UPDATE_FEEDBACK_MUTATION,
+    {
+      refetchQueries: [
+        {
+          query: JOB_HISTORY_QUERY,
+          variables: {userId: userID},
+        },
+      ],
+    },
+  );
   // refetch should not be ncessary since it's subscription thing
   let buttontext = (
     <Text
@@ -36,7 +49,7 @@ export default function FeedbackButton({ jobID, userID }) {
           fontSize: 36,
         },
       ]}>
-      FEEDBACK
+      {t('job.FeedbackButtonLabel')}
     </Text>
   );
   if (loading) {
@@ -70,32 +83,44 @@ export default function FeedbackButton({ jobID, userID }) {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-        }}
-      >
+          Alert.alert('Modal has been closed.');
+        }}>
         <View style={modelStyles.centeredView}>
           <View style={modelStyles.modalView}>
-            <View style={modelStyles.closeButton} >
+            <View style={modelStyles.closeButton}>
               <TouchableOpacity
-                onPress={() => { setModalVisible(false) }}
-              >
-                <Icon name="ios-close" size={50} color={"#aaa"} />
+                onPress={() => {
+                  setModalVisible(false);
+                }}>
+                <Icon name="ios-close" size={50} color={'#aaa'} />
               </TouchableOpacity>
             </View>
-            <Text style={modelStyles.modalText}>Your feedback is valuable to us</Text>
+            <Text style={modelStyles.modalText}>
+              {t('job.FeedbackQuestion')}
+            </Text>
 
             <AirbnbRating
               count={5}
-              reviews={["Bad", "Meh", "OK", "Good", "Excellent"]}
+              reviews={[
+                t('job.FeedbackRating1'),
+                t('job.FeedbackRating2'),
+                t('job.FeedbackRating3'),
+                t('job.FeedbackRating4'),
+                t('job.FeedbackRating5'),
+              ]}
               startingValue={rating}
               size={30}
-              onFinishRating={v => {
-                setRating(v)
+              onFinishRating={(v) => {
+                setRating(v);
               }}
             />
 
             <TouchableHighlight
-              style={{ ...modelStyles.openButton, marginTop: 30, backgroundColor: "#2196F3" }}
+              style={{
+                ...modelStyles.openButton,
+                marginTop: 30,
+                backgroundColor: '#2196F3',
+              }}
               onPress={() => {
                 setModalVisible(!modalVisible);
                 const variables = {
@@ -106,16 +131,15 @@ export default function FeedbackButton({ jobID, userID }) {
                 update_feedack({
                   variables,
                 })
-                  .then(res => {
+                  .then((res) => {
                     // console.log('done: feedback driver', res);
                     // console.log(res.data.update_trip.returning);
                   })
-                  .catch(err => {
+                  .catch((err) => {
                     console.log('err: ', err);
-                  })
-              }}
-            >
-              <Text style={modelStyles.textStyle}>Submit</Text>
+                  });
+              }}>
+              <Text style={modelStyles.textStyle}>{t('modal.Confirm')}</Text>
             </TouchableHighlight>
           </View>
         </View>
@@ -129,7 +153,7 @@ export default function FeedbackButton({ jobID, userID }) {
         }}
         disabled={processing || loading || error}
         onPress={() => {
-          setModalVisible(!modalVisible)
+          setModalVisible(!modalVisible);
         }}>
         {buttontext}
       </TouchableOpacity>
@@ -137,50 +161,49 @@ export default function FeedbackButton({ jobID, userID }) {
   );
 }
 
-
 const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
   closeButton: {
     width: '100%',
     padding: 0,
     display: 'flex',
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "flex-end",
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5
+    elevation: 5,
   },
   openButton: {
-    backgroundColor: "#F194FF",
+    backgroundColor: '#F194FF',
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
-    textAlign: "center"
-  }
+    textAlign: 'center',
+  },
 });

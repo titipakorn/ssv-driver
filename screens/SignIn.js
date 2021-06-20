@@ -1,4 +1,5 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
   SafeAreaView,
@@ -7,10 +8,9 @@ import {
   TextInput,
   TouchableHighlight,
 } from 'react-native';
-import { AuthContext } from '../App';
+import {AuthContext} from '../App';
 
-
-async function login({ username, password }) {
+async function login({username, password}) {
   try {
     let resp = await fetch('https://ssv-one.10z.dev/login', {
       method: 'POST',
@@ -27,33 +27,34 @@ async function login({ username, password }) {
     return json;
   } catch (error) {
     console.log('error: ', error);
-    return { error: error };
+    return {error: error};
   }
 }
 
 export default function SignInScreen() {
+  const {t} = useTranslation();
   const [loading, setLoading] = React.useState(false);
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [errMsg, setErrMsg] = React.useState('');
-  const { signIn } = React.useContext(AuthContext);
+  const {signIn} = React.useContext(AuthContext);
 
-  const btnDisabled = loading || username.length == 0 || password.length == 0
+  const btnDisabled = loading || username.length == 0 || password.length == 0;
   return (
     <SafeAreaView>
       <Text numberOfLines={1} style={styles.title}>
-        Sign In
+        {t('signin.Title')}
       </Text>
       {errMsg.length > 0 && <Text style={styles.error}>{errMsg}</Text>}
       <TextInput
-        placeholder="Username"
+        placeholder={t('signin.UsernamePlaceHolder')}
         placeholderTextColor={'#7f7f7f'}
         value={username}
-        onChangeText={v => setUsername(v.toLocaleLowerCase())}
+        onChangeText={(v) => setUsername(v.toLocaleLowerCase())}
         style={[styles.Input]}
       />
       <TextInput
-        placeholder="Password"
+        placeholder={t('signin.PasswordPlaceHolder')}
         value={password}
         onChangeText={setPassword}
         secureTextEntry
@@ -62,10 +63,13 @@ export default function SignInScreen() {
       />
       <TouchableHighlight
         disabled={btnDisabled}
-        style={[styles.Button, { backgroundColor: btnDisabled ? '#c1c7c9' : '#447bfc' }]}
+        style={[
+          styles.Button,
+          {backgroundColor: btnDisabled ? '#c1c7c9' : '#447bfc'},
+        ]}
         onPress={async () => {
           setLoading(true);
-          const resp = await login({ username, password });
+          const resp = await login({username, password});
           if (resp.error !== undefined) {
             setErrMsg(resp.error);
           } else {
@@ -73,13 +77,14 @@ export default function SignInScreen() {
           }
           setLoading(false);
         }}>
-        <Text style={styles.ButtonText}>{loading ? 'Working... ' : 'Log in'}</Text>
+        <Text style={styles.ButtonText}>
+          {loading ? t('signin.Loading') : t('signin.SubmitLabel')}
+        </Text>
       </TouchableHighlight>
       {loading && <ActivityIndicator />}
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   baseText: {
@@ -115,7 +120,7 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   Button: {
-    backgroundColor: "#447bfc",
+    backgroundColor: '#447bfc',
     borderRadius: 10,
     paddingVertical: 5,
     paddingHorizontal: 10,
@@ -127,5 +132,5 @@ const styles = StyleSheet.create({
     color: 'white',
     textAlign: 'center',
     fontSize: 20,
-  }
+  },
 });
