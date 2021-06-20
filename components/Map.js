@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { StyleSheet } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import MapView, { Polyline, Marker } from 'react-native-maps';
@@ -53,17 +53,17 @@ function polyline2direction(polyline) {
 }
 
 export default function Map({ pins, trip, handleGeoInfo }) {
-  let mapHandler = React.useRef(null);
-  let watchID = React.useRef(null);
-  const [region, setRegion] = React.useState({
+  let mapHandler = useRef(null);
+  let watchID = useRef(null);
+  const [region, setRegion] = useState({
     latitude: 13.7385,
     longitude: 100.5706,
     latitudeDelta: 0.0122,
     longitudeDelta: 0.0121,
   });
-  const [traces, setTraces] = React.useState([]);
-  const [log, setLog] = React.useState([]);
-  const [geo, setGeo] = React.useState({
+  const [traces, setTraces] = useState([]);
+  const [log, setLog] = useState([]);
+  const [geo, setGeo] = useState({
     initialPosition: 'unknown',
     lastPosition: 'unknown',
     error: null
@@ -71,7 +71,7 @@ export default function Map({ pins, trip, handleGeoInfo }) {
   const { step } = trip
   const isActive = (trip.traces !== undefined && !['done', 'over'].includes(step))
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = () => {
       Geolocation.getCurrentPosition(
@@ -111,12 +111,12 @@ export default function Map({ pins, trip, handleGeoInfo }) {
     };
   }, [isActive]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const mb = mapbound(geo.lastPosition.coords, pins);
     if (mb) mapHandler.animateToRegion(mb, 500);
   }, [pins, geo]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const ts = trip.traces
     if (ts && ts.length > 0) {
       // console.log('tssss:', ts[0])

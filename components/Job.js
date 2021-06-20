@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
 import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -15,16 +15,16 @@ import GeoIndicator from './GeoIndicator';
 import {useTranslation} from 'react-i18next';
 
 export default function Job({route}) {
-  let intval = React.useRef(null);
+  let intval = useRef(null);
   const {t} = useTranslation();
   const {id} = route.params;
-  const [pins, setPins] = React.useState({
+  const [pins, setPins] = useState({
     origin: {},
     destination: {},
   });
-  const [userData, setUserData] = React.useState(null);
-  const [item, setItem] = React.useState({});
-  const [geo, setGeo] = React.useState({
+  const [userData, setUserData] = useState(null);
+  const [item, setItem] = useState({});
+  const [geo, setGeo] = useState({
     initialPosition: 'unknown',
     lastPosition: 'unknown',
     error: null,
@@ -35,7 +35,7 @@ export default function Job({route}) {
   });
   useKeepAwake();
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = async () => {
       try {
@@ -49,7 +49,7 @@ export default function Job({route}) {
     if (userData === null) bootstrapAsync();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     clearInterval(intval);
     if (data && data.items.length > 0) {
       setItem(process(data, t));

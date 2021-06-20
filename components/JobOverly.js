@@ -1,5 +1,6 @@
 import {useMutation, useSubscription} from '@apollo/react-hooks';
 import dayjs from 'dayjs';
+import {activateKeepAwake, deactivateKeepAwake} from 'expo-keep-awake';
 import gql from 'graphql-tag';
 import React, {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
@@ -7,6 +8,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {hhmmDuration} from '../libs/day';
+import GeoLocationProvider from './GeoLocationProvider';
 
 const GREEN = 'rgba(68, 252, 148, 0.3)';
 const YELLOW = 'rgba(252, 186, 3, 0.5)';
@@ -14,14 +16,16 @@ const RED = 'rgba(249, 88, 67, 0.5)';
 
 export default function JobOverlay({isWorking, setWorking}) {
   const {t} = useTranslation();
-  const {data, loading} = useSubscription(ACTIVE_WORKING_SHIFT);
+  const [geo, setGeo] = useState(null);
+  const [lastGeoTimestamp, setLastGeoTimestamp] = useState(0);
   const [shiftID, setShiftID] = useState(-1);
+  const {data, loading} = useSubscription(ACTIVE_WORKING_SHIFT);
   const [shiftDuration, setShiftDuration] = useState('');
   const [startWorking, {loading: startLoading, error: startError}] =
     useMutation(START_WORKING_MUTATION);
   const [endWorking, {loading: endLoading, error: endError}] =
     useMutation(END_WORKING_MUTATION);
-  const [updateWorking, {loading: updateLoading, error: updateError}] =
+  const [updateWorking, {loading: updateLoading}] =
     useMutation(UPDATE_WORKING_MUTATION);
 
   useEffect(() => {
@@ -44,8 +48,41 @@ export default function JobOverlay({isWorking, setWorking}) {
     return () => clearInterval(timer);
   });
 
+  useEffect(() => {
+    if (isWorking) {
+      activateKeepAwake();
+    } else {
+      deactivateKeepAwake();
+    }
+  }, [isWorking]);
+
+  useEffect(async () => {
+    // console.log('geo: = ', geo);
+    if (geo.error) return;
+    if (!geo.lastPosition) return;
+    const {coords, timestamp} = geo.lastPosition;
+    // console.log('geo [TMSP] ', timestamp, lastGeoTimestamp);
+    if (timestamp > lastGeoTimestamp) {
+      // TODO: update last coords to working-shift
+      setLastGeoTimestamp(timestamp);
+      // console.log('got new coords', shiftID)
+      if (shiftID && !updateLoading) {
+        const variables = {
+          ID: shiftID,
+          point: {
+            type: 'Point',
+            coordinates: [coords.longitude, coords.latitude],
+          },
+          timestamp: dayjs(timestamp).format(),
+        };
+        const resUpdate = await updateWorking({variables});
+      }
+    }
+  }, [geo]);
+
   return (
     <View style={styles.container}>
+      <GeoLocationProvider isActive={isWorking} handleGeoInfo={setGeo} />
       {!isWorking && (
         <View
           style={[
