@@ -18,44 +18,8 @@ import JobOverlay from './JobOverly';
 import {useTranslation} from 'react-i18next';
 
 export default function AvailableJobsContainer() {
+  const [user, setUser] = useState({});
   const [working, setWorking] = useState(false);
-  return (
-    <OverlayComponent
-      behind={<AvailableJobs isWorking={working} />}
-      front={<JobOverlay isWorking={working} setWorking={setWorking} />}
-    />
-  );
-}
-
-function AvailableJobs({isWorking}) {
-  let intval = useRef(null);
-  const {t} = useTranslation();
-  const [user, setUser] = useState(null);
-  const [items, setItems] = useState([]);
-  const [tm, setTm] = useState(getToday());
-  // const [selected, setSelected] = useState(new Map());
-  const {loading, error, data} = useSubscription(QUEUE_SUBSCRIPTION, {
-    shouldResubscribe: isWorking,
-    skip: !isWorking || user == null,
-    variables: {userId: user ? user.id : null, day: tm},
-  });
-  /* const onSelect = useCallback(
-    id => {
-      const newSelected = new Map(selected);
-      newSelected.set(id, !selected.get(id));
-
-      setSelected(newSelected);
-    },
-    [selected],
-  ); */
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTm(getToday());
-      // console.log('setTm: ', tm);
-    }, 5000);
-    // clearing interval
-    return () => clearInterval(timer);
-  });
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
@@ -66,10 +30,51 @@ function AvailableJobs({isWorking}) {
         setUser(userJSON);
       } catch (e) {
         // Restoring token failed
+        // console.log('err: ', e);
       }
     };
-    if (user === null) bootstrapAsync();
+    if (!user.id) bootstrapAsync();
   }, []);
+
+  if (!user.id) {
+    return (
+      <View>
+        <Text style={{textAlign: 'center', paddingVertical: 100}}>
+          Loading...
+        </Text>
+      </View>
+    );
+  }
+
+  return (
+    <OverlayComponent
+      behind={<AvailableJobs isWorking={working} user={user} />}
+      front={
+        <JobOverlay isWorking={working} setWorking={setWorking} user={user} />
+      }
+    />
+  );
+}
+
+function AvailableJobs({isWorking, user}) {
+  let intval = useRef(null);
+  const {t} = useTranslation();
+  const [items, setItems] = useState([]);
+  const [tm, setTm] = useState(getToday());
+  // const [selected, setSelected] = useState(new Map());
+  const {loading, error, data} = useSubscription(QUEUE_SUBSCRIPTION, {
+    shouldResubscribe: isWorking,
+    skip: !isWorking || user == null,
+    variables: {userId: user ? user.id : null, day: tm},
+  });
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTm(getToday());
+    }, 5000);
+    // clearing interval
+    return () => clearInterval(timer);
+  });
 
   useEffect(() => {
     clearInterval(intval);
@@ -188,6 +193,7 @@ function Item(row) {
     </TouchableHighlight>
   );
 }
+
 function itemProcess(data, t) {
   if (!data) return [];
   if (!data.items) return [];

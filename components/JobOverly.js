@@ -14,23 +14,26 @@ const GREEN = 'rgba(68, 252, 148, 0.3)';
 const YELLOW = 'rgba(252, 186, 3, 0.5)';
 const RED = 'rgba(249, 88, 67, 0.5)';
 
-export default function JobOverlay({isWorking, setWorking}) {
+export default function JobOverlay({isWorking, setWorking, user}) {
   const {t} = useTranslation();
   const [geo, setGeo] = useState(null);
   const [lastGeoTimestamp, setLastGeoTimestamp] = useState(0);
   const [shiftID, setShiftID] = useState(-1);
-  const {data, loading} = useSubscription(ACTIVE_WORKING_SHIFT);
+  const {data, loading} = useSubscription(ACTIVE_WORKING_SHIFT, {
+    variables: {userId: user.id},
+  });
   const [shiftDuration, setShiftDuration] = useState('');
   const [startWorking, {loading: startLoading, error: startError}] =
     useMutation(START_WORKING_MUTATION);
   const [endWorking, {loading: endLoading, error: endError}] =
     useMutation(END_WORKING_MUTATION);
-  const [updateWorking, {loading: updateLoading}] =
-    useMutation(UPDATE_WORKING_MUTATION);
+  const [updateWorking, {loading: updateLoading}] = useMutation(
+    UPDATE_WORKING_MUTATION,
+  );
 
   useEffect(() => {
     if (loading) return;
-    if (data.working_shift.length > 0) {
+    if (data && data.working_shift.length > 0) {
       setWorking(true);
       const item = data.working_shift[0];
       setShiftID(item.id);
@@ -39,7 +42,7 @@ export default function JobOverlay({isWorking, setWorking}) {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      if (shiftID > -1 && !loading && data.working_shift.length > 0) {
+      if (shiftID > -1 && !loading && data && data.working_shift.length > 0) {
         const start = dayjs(data.working_shift[0].start);
         setShiftDuration(hhmmDuration(start, dayjs()));
       }
@@ -57,27 +60,25 @@ export default function JobOverlay({isWorking, setWorking}) {
   }, [isWorking]);
 
   useEffect(async () => {
-    // console.log('geo: = ', geo);
     if (geo.error) return;
     if (!geo.lastPosition) return;
     const {coords, timestamp} = geo.lastPosition;
-    // console.log('geo [TMSP] ', timestamp, lastGeoTimestamp);
-    if (timestamp > lastGeoTimestamp) {
-      // TODO: update last coords to working-shift
-      setLastGeoTimestamp(timestamp);
-      // console.log('got new coords', shiftID)
-      if (shiftID && !updateLoading) {
-        const variables = {
-          ID: shiftID,
-          point: {
-            type: 'Point',
-            coordinates: [coords.longitude, coords.latitude],
-          },
-          timestamp: dayjs(timestamp).format(),
-        };
-        const resUpdate = await updateWorking({variables});
-      }
+    // if (timestamp > lastGeoTimestamp) {
+    // TODO: update last coords to working-shift
+    setLastGeoTimestamp(timestamp);
+    console.log('new geo: ', shiftID, timestamp)
+    if (shiftID && !updateLoading) {
+      const variables = {
+        ID: shiftID,
+        point: {
+          type: 'Point',
+          coordinates: [coords.longitude, coords.latitude],
+        },
+        timestamp: dayjs(timestamp).format(),
+      };
+      const resUpdate = await updateWorking({variables});
     }
+    // }
   }, [geo]);
 
   return (
@@ -104,7 +105,6 @@ export default function JobOverlay({isWorking, setWorking}) {
               onPress={async () => {
                 const variables = {vehicleID: 1};
                 const res = await startWorking({variables});
-                console.log('start working: ', res);
                 const {id} = res.data.insert_working_shift_one;
                 setShiftID(id);
                 setWorking(true);
@@ -128,7 +128,6 @@ export default function JobOverlay({isWorking, setWorking}) {
                 timestamp: dayjs().format(),
               };
               const res = await endWorking({variables});
-              console.log('end working: ', res);
               setShiftID(-1);
               setShiftDuration('');
               setWorking(false);
@@ -143,8 +142,8 @@ export default function JobOverlay({isWorking, setWorking}) {
 ``;
 
 const ACTIVE_WORKING_SHIFT = gql`
-  subscription ACTIVE_WORKING_SHIFT {
-    working_shift(where: {end: {_is_null: true}}) {
+  subscription ACTIVE_WORKING_SHIFT($userId: uuid!) {
+    working_shift(where: {user_id: {_eq: $userId}, end: {_is_null: true}}) {
       id
       start
       vehicle_id
