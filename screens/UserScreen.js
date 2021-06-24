@@ -7,6 +7,8 @@ import JobHistory from '../components/JobHistory';
 const UserStack = createStackNavigator();
 
 export default function UserScreen() {
+  const {t} = useTranslation();
+
   return (
     <UserStack.Navigator
       screenOptions={{
@@ -17,6 +19,7 @@ export default function UserScreen() {
         component={Profile}
         options={{
           animationEnabled: true,
+          title: t('profile.Title'),
         }}
       />
       <UserStack.Screen
@@ -24,6 +27,7 @@ export default function UserScreen() {
         component={JobHistory}
         options={{
           animationEnabled: true,
+          title: t('profile.JobHistoryButtonLabel'),
         }}
       />
     </UserStack.Navigator>

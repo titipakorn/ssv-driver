@@ -18,17 +18,19 @@ export function IndexScreen() {
         headerShown: true,
       }}>
       <MainStack.Screen
-        name={t('jobList.Title')}
+        name={'JobList'}
         component={AvailableJobs}
         options={{
           animationEnabled: true,
+          title: t('jobList.Title'),
         }}
       />
       <MainStack.Screen
-        name={t('job.Title')}
+        name={'Job'}
         component={Job}
         options={{
           animationEnabled: true,
+          title: t('job.Title'),
         }}
       />
     </MainStack.Navigator>
