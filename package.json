@@ -27,6 +27,7 @@
     "apollo-link-error": "^1.1.13",
     "apollo-link-http": "^1.5.17",
     "apollo-link-ws": "^1.0.20",
+    "babel-plugin-inline-import": "^3.0.0",
     "dayjs": "^1.10.5",
     "expo-keep-awake": "^9.1.2",
     "graphql": "^15.5.0",
@@ -45,6 +46,7 @@
     "react-native-reanimated": "^2.2.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^3.4.0",
+    "react-native-svg": "^12.1.1",
     "react-native-unimodules": "^0.13.3",
     "react-native-vector-icons": "^8.1.0",
     "subscriptions-transport-ws": "^0.9.19"
