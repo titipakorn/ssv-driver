@@ -37,6 +37,7 @@
     "react": "^17.0.2",
     "react-i18next": "^11.11.0",
     "react-native": "^0.64.2",
+    "react-native-a-beep": "^1.1.0",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-image-crop-picker": "^0.36.2",
@@ -49,6 +50,7 @@
     "react-native-svg": "^12.1.1",
     "react-native-unimodules": "^0.13.3",
     "react-native-vector-icons": "^8.1.0",
+    "react-native-version-info": "^1.1.1",
     "subscriptions-transport-ws": "^0.9.19"
   },
   "devDependencies": {

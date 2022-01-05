@@ -16,6 +16,7 @@ import {useKeepAwake} from 'expo-keep-awake';
 import OverlayComponent from './OverlayComponent';
 import JobOverlay from './JobOverly';
 import {useTranslation} from 'react-i18next';
+import RNBeep from 'react-native-a-beep';
 
 export default function AvailableJobsContainer() {
   const [user, setUser] = useState({});
@@ -82,6 +83,9 @@ function AvailableJobs({isWorking, user}) {
       if (data.items.length === 0) {
         setItems([]);
       } else {
+        if (data.items.length != items.length) {
+          RNBeep.beep();
+        }
         setItems(itemProcess(data, t));
         // need to force re-render time although no update data
         intval = setInterval(() => {

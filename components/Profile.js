@@ -14,6 +14,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {useNavigation} from '@react-navigation/native';
 import {useTranslation, Trans} from 'react-i18next';
 import {AuthContext} from '../App';
+import VersionInfo from 'react-native-version-info';
 
 export default function Profile() {
   const {t, i18n} = useTranslation();
@@ -109,6 +110,16 @@ export default function Profile() {
             title={lang === 'en' ? 'Change to th' : 'Change to en'}
           />
         )}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={styles.contentText}>
+            Version: {VersionInfo.appVersion}
+          </Text>
+        </View>
       </View>
     </SafeAreaView>
   );
