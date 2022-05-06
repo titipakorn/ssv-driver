@@ -84,7 +84,7 @@ function AvailableJobs({isWorking, user}) {
         setItems([]);
       } else {
         if (data.items.length != items.length) {
-          RNBeep.beep();
+          RNBeep.PlaySysSound(RNBeep.iOSSoundIDs.Voicemail);
         }
         setItems(itemProcess(data, t));
         // need to force re-render time although no update data
