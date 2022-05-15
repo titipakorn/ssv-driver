@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
   ActivityIndicator,
@@ -9,7 +9,6 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import {AuthContext} from '../App';
-
 async function login({username, password}) {
   try {
     let resp = await fetch('https://ssv-one.10z.dev/login', {

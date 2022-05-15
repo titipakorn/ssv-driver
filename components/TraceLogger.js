@@ -20,20 +20,23 @@ export default function TraceLogger({tripID, tripState, position}) {
   }, []);
 
   React.useEffect(() => {
-    if (log.length === 0) return;
-    if (!hasUploaded) {
-      // first one will be uploaded w/o any wait
-      upload(insertTraces, setProcessing, log);
-      setLog([]);
-      setUploaded(true);
-      return;
-    }
-
-    const duration = (dayjs() - dayjs(log[0].timestamp)) / 1000;
-    if (duration > 60 || log.length > 20 || tripState === 'done') {
-      upload(insertTraces, setProcessing, log);
-      setLog([]);
-    }
+    const interval = setInterval(() => {
+      if (log.length === 0) return;
+      if (!hasUploaded) {
+        // first one will be uploaded w/o any wait
+        upload(insertTraces, setProcessing, log);
+        setLog([]);
+        setUploaded(true);
+        return;
+      }
+      const duration = (dayjs() - dayjs(log[0].timestamp)) / 1000;
+      if (duration > 60 || log.length > 20 || tripState === 'done') {
+        console.log('send data', log, 'to Server');
+        upload(insertTraces, setProcessing, log);
+        setLog([]);
+      }
+    }, 500);
+    return () => clearInterval(interval);
   }, [log]);
 
   React.useEffect(() => {
@@ -67,6 +70,7 @@ export default function TraceLogger({tripID, tripState, position}) {
     // update timestamp
     setTmsp(timestamp);
     setLog(updatedLog);
+    console.log('updateLog data', updatedLog, 'to Server');
   }, [position, tripState]);
 
   if (error) {

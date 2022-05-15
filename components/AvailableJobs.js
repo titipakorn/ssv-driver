@@ -254,7 +254,7 @@ const QUEUE_SUBSCRIPTION = gql`
           {cancelled_at: {_is_null: true}}
           {dropped_off_at: {_is_null: true}}
           {reserved_at: {_gte: $day}}
-          {_or: [{driver_id: null}, {driver_id: {_eq: $userId}}]}
+          {_or: [{driver_id: {_is_null: true}}, {driver_id: {_eq: $userId}}]}
         ]
       }
       order_by: {reserved_at: desc}

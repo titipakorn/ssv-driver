@@ -1,7 +1,13 @@
 import React, {useEffect, useRef, useState} from 'react';
 import Geolocation from '@react-native-community/geolocation';
+const faye = require('faye');
+var client = new faye.Client('https://ssv-one.10z.dev/faye/faye');
 
-export default function GeoLocationProvider({handleGeoInfo, isActive = false}) {
+export default function GeoLocationProvider({
+  user,
+  handleGeoInfo,
+  isActive = false,
+}) {
   let watchID = useRef(null);
   const [geo, setGeo] = useState({
     initialPosition: 'unknown',
@@ -26,6 +32,11 @@ export default function GeoLocationProvider({handleGeoInfo, isActive = false}) {
             lastPosition: initialPosition,
             error: null,
           };
+          client.publish('/driver_locations', {
+            driver: user,
+            coords: position.coords,
+            timestamp: position.timestamp,
+          });
           setGeo(x);
         },
         (error) => {
@@ -38,7 +49,12 @@ export default function GeoLocationProvider({handleGeoInfo, isActive = false}) {
       );
       watchID = Geolocation.watchPosition((position) => {
         const lastPosition = position;
-        // console.log('last position: ', typeof lastPosition, lastPosition);
+        console.log('last position: ', typeof lastPosition, lastPosition);
+        client.publish('/driver_locations', {
+          driver: user,
+          coords: position.coords,
+          timestamp: position.timestamp,
+        });
         const x = {...geo, lastPosition};
         setGeo(x);
       });

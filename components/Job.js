@@ -1,5 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
-import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+} from 'react-native';
 import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
 import {useSubscription} from '@apollo/react-hooks';
@@ -75,7 +81,6 @@ export default function Job({route}) {
       return () => clearInterval(intval);
     }
   }, [data]);
-
   return (
     <>
       <Map pins={pins} trip={item} handleGeoInfo={setGeo} />
@@ -106,6 +111,7 @@ function ItemDisplay(props) {
     cancelled_at,
     tmPrimary,
     tmSecondary,
+    note,
   } = props.item;
   const {t} = useTranslation();
   const {userID} = props;
@@ -124,7 +130,7 @@ function ItemDisplay(props) {
   */
   // console.log('current step: ', step)
   const isActiveStep = ['accept', 'onboard'].includes(step);
-  let isActive = isYourJob || isActiveStep;
+  let isActive = (isYourJob || isActiveStep) && cancelled_at === null;
   let currStep = step;
   let relTime = `${
     tmPrimary !== 'Passed' ? `${t('time.In')} ` : ''
@@ -168,7 +174,7 @@ function ItemDisplay(props) {
           <Text style={{color: '#444'}}>{t('job.InactiveStatus')}</Text>
         </View>
       )}
-      <View style={{paddingHorizontal: 5}}>
+      <ScrollView style={{paddingHorizontal: 5}}>
         <View
           style={[
             styles.flexRow,
@@ -191,9 +197,26 @@ function ItemDisplay(props) {
           <Text style={styles.locationActive}>{from}</Text>
           <Text style={styles.locationInActive}>→ {to}</Text>
         </View>
-        {/* <Text style={{color: '#888', marginVertical: 10}}>
-          {t('job.PickupInformation')}
-        </Text> */}
+        <Text
+          style={{
+            color: '#888',
+            marginVertical: 10,
+            fontSize: 20,
+            textAlign: 'center',
+          }}>
+          {`${t('job.ID')} ${id}`}
+        </Text>
+        {note && (
+          <Text
+            style={{
+              color: 'red',
+              marginVertical: 10,
+              fontSize: 20,
+              textAlign: 'center',
+            }}>
+            {`${note}`}
+          </Text>
+        )}
         {user && (
           <Text
             style={[
@@ -203,47 +226,12 @@ function ItemDisplay(props) {
             {user.username}
           </Text>
         )}
-      </View>
-      {/* <View
-        style={{
-          marginVertical: 20,
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-        }}>
-        <TouchableOpacity
-          onPress={() => Alert.alert('Button with adjusted color pressed')}>
-          <Image
-            style={styles.button}
-            source={require('../static/message.png')}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() =>
-            Alert.alert(
-              'Alert Title',
-              'My Alert Msg',
-              [
-                {
-                  text: 'Cancel',
-                  onPress: () => console.log('Cancel Pressed'),
-                  style: 'cancel',
-                },
-                { text: 'OK', onPress: () => console.log('OK Pressed') },
-              ],
-              { cancelable: false },
-            )
-          }>
-          <Image
-            style={styles.button}
-            source={require('../static/phone.png')}
-          />
-        </TouchableOpacity>
-      </View> */}
+      </ScrollView>
       {/* can start job only now and future job */}
       {currStep === 'wait' && cancelled_at === null && (
         <AcceptJobButton jobID={id} userID={userID} />
       )}
-      {isYourJob && (
+      {isYourJob && cancelled_at === null && (
         <>
           {currStep === 'accept' && <PickupButton jobID={id} />}
           {currStep === 'onboard' && <DropoffButton jobID={id} />}
@@ -278,7 +266,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   locationActive: {
-    fontSize: 40,
+    fontSize: 35,
   },
   locationInActive: {
     fontSize: 28,
@@ -308,6 +296,7 @@ const JOB_SUBSCRIPTION = gql`
       driver {
         id
       }
+      note
       reserved_at
       accepted_at
       picked_up_at

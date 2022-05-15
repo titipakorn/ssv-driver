@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { StyleSheet } from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {StyleSheet} from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import MapView, { Polyline, Marker } from 'react-native-maps';
+import MapView, {Polyline, Marker} from 'react-native-maps';
 import bbox from '@turf/bbox';
-import { lineString } from '@turf/helpers';
-import MapboxPolyline from '@mapbox/polyline'
+import {lineString} from '@turf/helpers';
+import MapboxPolyline from '@mapbox/polyline';
 import TraceLogger from './TraceLogger';
+const faye = require('faye');
+var client = new faye.Client('https://ssv-one.10z.dev/faye/faye');
 
 function mapbound(curr, ODpins) {
   let arr = [];
@@ -18,7 +20,7 @@ function mapbound(curr, ODpins) {
   if (curr && curr.latitude) {
     arr.push([curr.longitude, curr.latitude]);
   }
-  Object.keys(ODpins).map(k => {
+  Object.keys(ODpins).map((k) => {
     const one = ODpins[k];
     if (one.latitude) {
       arr.push([one.longitude, one.latitude]);
@@ -47,12 +49,14 @@ function mapbound(curr, ODpins) {
 }
 
 function polyline2direction(polyline) {
-  if (!polyline) return []
-  return MapboxPolyline.decode(polyline)
-    .map(ltln => ({ latitude: ltln[0], longitude: ltln[1] }))
+  if (!polyline) return [];
+  return MapboxPolyline.decode(polyline).map((ltln) => ({
+    latitude: ltln[0],
+    longitude: ltln[1],
+  }));
 }
 
-export default function Map({ pins, trip, handleGeoInfo }) {
+export default function Map({pins, trip, handleGeoInfo}) {
   let mapHandler = useRef(null);
   let watchID = useRef(null);
   const [region, setRegion] = useState({
@@ -66,43 +70,71 @@ export default function Map({ pins, trip, handleGeoInfo }) {
   const [geo, setGeo] = useState({
     initialPosition: 'unknown',
     lastPosition: 'unknown',
-    error: null
+    error: null,
   });
-  const { step } = trip
-  const isActive = (trip.traces !== undefined && !['done', 'over'].includes(step))
+  const {step} = trip;
+  const isActive =
+    trip.traces !== undefined && !['done', 'over'].includes(step);
 
   useEffect(() => {
     // Fetch the token from storage then navigate to our appropriate place
     const bootstrapAsync = () => {
       Geolocation.getCurrentPosition(
-        position => {
-          console.log('new position: ', position);
+        (position) => {
+          console.log('initial position: ', position);
           const initialPosition = position;
-          const x = { initialPosition, lastPosition: initialPosition, error: null }
+          const x = {
+            initialPosition,
+            lastPosition: initialPosition,
+            error: null,
+          };
           setGeo(x);
-          handleGeoInfo(x)
+          handleGeoInfo(x);
+          client.publish(`/driver_locations/${trip.user.username}`, {
+            driver: trip.user.username,
+            trip_id: trip.trip_id,
+            coords: position.coords,
+            timestamp: position.timestamp,
+          });
+          // client.publish('/driver_locations', {
+          //   driver: trip.user.username,
+          //   trip_id: trip.trip_id,
+          //   coords: position.coords,
+          //   timestamp: position.timestamp,
+          // });
         },
-        error => {
+        (error) => {
           console.log('error: ', JSON.stringify(error));
           // Alert.alert('Error', JSON.stringify(error))
-          const x = { ...geo, error }
+          const x = {...geo, error};
           setGeo(x);
-          handleGeoInfo(x)
+          handleGeoInfo(x);
         },
-        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+        {enableHighAccuracy: true, timeout: 20000, maximumAge: 1000},
       );
-      watchID = Geolocation.watchPosition(position => {
+      watchID = Geolocation.watchPosition((position) => {
         const lastPosition = position;
-        // console.log('last position: ', typeof lastPosition, lastPosition);
-        const x = { ...geo, lastPosition }
+        console.log('current position: ', typeof lastPosition, lastPosition);
+        const x = {...geo, lastPosition};
         setGeo(x);
-        handleGeoInfo(x)
+        client.publish(`/driver_locations/${trip.user.username}`, {
+          driver: trip.user.username,
+          trip_id: trip.trip_id,
+          coords: position.coords,
+          timestamp: position.timestamp,
+        });
+        // client.publish('/driver_locations', {
+        //   driver: trip.user.username,
+        //   trip_id: trip.trip_id,
+        //   coords: position.coords,
+        //   timestamp: position.timestamp,
+        // });
+        handleGeoInfo(x);
       });
     };
 
-    handleGeoInfo(geo)
-    if (isActive)
-      bootstrapAsync();
+    handleGeoInfo(geo);
+    if (isActive) bootstrapAsync();
 
     return () => {
       if (watchID !== null) {
@@ -117,24 +149,26 @@ export default function Map({ pins, trip, handleGeoInfo }) {
   }, [pins, geo]);
 
   useEffect(() => {
-    const ts = trip.traces
+    const ts = trip.traces;
     if (ts && ts.length > 0) {
       // console.log('tssss:', ts[0])
-      setTraces(ts.map(i => (
-        { latitude: i['point']['coordinates'][1], longitude: i['point']['coordinates'][0], }
-      )))
+      setTraces(
+        ts.map((i) => ({
+          latitude: i['point']['coordinates'][1],
+          longitude: i['point']['coordinates'][0],
+        })),
+      );
     }
   }, [trip]);
-
   return (
     <>
       <MapView
         style={styles.map}
         initialRegion={region}
-        ref={map => {
+        ref={(map) => {
           mapHandler = map;
         }}>
-        {Object.keys(pins).map(k => {
+        {Object.keys(pins).map((k) => {
           if (pins[k].latitude) {
             return (
               <Marker
@@ -156,17 +190,21 @@ export default function Map({ pins, trip, handleGeoInfo }) {
             coordinate={geo.lastPosition.coords}
           />
         )}
-        {traces.length > 0 && <Polyline coordinates={traces}
-          strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
-          strokeColors={[
-            '#7F0000',
-            '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
-            '#B24112',
-            '#E5845C',
-            '#238C23',
-            '#7F0000'
-          ]}
-          strokeWidth={2} />}
+        {traces.length > 0 && (
+          <Polyline
+            coordinates={traces}
+            strokeColor="#000" // fallback for when `strokeColors` is not supported by the map-provider
+            strokeColors={[
+              '#7F0000',
+              '#00000000', // no color, creates a "long" gradient between the previous and next coordinate
+              '#B24112',
+              '#E5845C',
+              '#238C23',
+              '#7F0000',
+            ]}
+            strokeWidth={2}
+          />
+        )}
 
         {/* <GeoIndicator position={geo.lastPosition} error={geo.error} /> */}
         <TraceLogger
@@ -174,10 +212,13 @@ export default function Map({ pins, trip, handleGeoInfo }) {
           tripState={trip.step}
           position={geo.lastPosition}
         />
-        {trip.polyline && <Polyline coordinates={polyline2direction(trip.polyline)}
-          strokeWidth={6}
-          strokeColor={"#3333dd88"}
-        />}
+        {trip.polyline && (
+          <Polyline
+            coordinates={polyline2direction(trip.polyline)}
+            strokeWidth={6}
+            strokeColor={'#3333dd88'}
+          />
+        )}
       </MapView>
     </>
   );

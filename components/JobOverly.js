@@ -75,10 +75,13 @@ export default function JobOverlay({isWorking, setWorking, user}) {
       const resUpdate = await updateWorking({variables});
     }
   }, [geo]);
-
   return (
     <View style={styles.container}>
-      <GeoLocationProvider isActive={isWorking} handleGeoInfo={setGeo} />
+      <GeoLocationProvider
+        isActive={isWorking}
+        handleGeoInfo={setGeo}
+        user={user.username}
+      />
       <VehiclePickerModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
