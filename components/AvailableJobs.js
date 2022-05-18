@@ -149,6 +149,7 @@ function Item(row) {
     tmSecondary,
     cancelled_at,
     driver_id,
+    driver,
     userID,
   } = row;
   let relTime = tmPrimary;
@@ -178,6 +179,7 @@ function Item(row) {
       <View style={[styles.flexRow]}>
         {from !== null && (
           <View style={[styles.flexColumn, {flex: 1}]}>
+            <Text style={styles.jobId}>Job ID {id}</Text>
             <Text style={styles.locationPickup}>
               {taken ? '/taken/' : ''}
               {from}
@@ -191,6 +193,9 @@ function Item(row) {
           </Text>
           <Text style={[styles.txtSecondary, {alignSelf: 'flex-end'}]}>
             {tmSecondary}
+          </Text>
+          <Text style={[styles.txtSecondary, {alignSelf: 'flex-end'}]}>
+            {driver?.username}
           </Text>
         </View>
       </View>
@@ -229,6 +234,9 @@ const styles = StyleSheet.create({
   flexColumn: {
     flexDirection: 'column',
   },
+  jobId: {
+    fontSize: 18,
+  },
   locationPickup: {
     fontSize: 24,
   },
@@ -254,7 +262,7 @@ const QUEUE_SUBSCRIPTION = gql`
           {cancelled_at: {_is_null: true}}
           {dropped_off_at: {_is_null: true}}
           {reserved_at: {_gte: $day}}
-          {_or: [{driver_id: {_is_null: true}}, {driver_id: {_eq: $userId}}]}
+          {_or: [{driver_id: null}, {driver_id: {_eq: $userId}}]}
         ]
       }
       order_by: {reserved_at: desc}
@@ -269,6 +277,10 @@ const QUEUE_SUBSCRIPTION = gql`
       picked_up_at
       cancelled_at
       driver_id
+      driver {
+        id
+        username
+      }
     }
   }
 `;
