@@ -1,11 +1,12 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import { ApolloProvider } from '@apollo/react-hooks';
+import {ApolloProvider} from '@apollo/react-hooks';
 import apolloClient from './libs/apollo';
-import Navi from './Navigation'
+import {RecoilRoot} from 'recoil';
+import Navi from './Navigation';
 
 Icon.loadFont();
 
@@ -57,7 +58,7 @@ const App = () => {
 
       // This will switch to the App screen or Auth screen and this loading
       // screen will be unmounted and thrown away.
-      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+      dispatch({type: 'RESTORE_TOKEN', token: userToken});
     };
 
     bootstrapAsync();
@@ -65,7 +66,7 @@ const App = () => {
 
   const authContext = React.useMemo(
     () => ({
-      signIn: async data => {
+      signIn: async (data) => {
         // In a production app, we need to send some data (usually username, password) to server and get a token
         // We will also need to handle errors if sign in failed
         // After getting token, we need to persist the token using `AsyncStorage`
@@ -76,12 +77,12 @@ const App = () => {
             await AsyncStorage.clear();
           }
           if (Platform.OS === 'ios') {
-            await AsyncStorage.getAllKeys().then(AsyncStorage.multiRemove)
+            await AsyncStorage.getAllKeys().then(AsyncStorage.multiRemove);
           }
         } else {
           AsyncStorage.setItem('userToken', data.token);
           AsyncStorage.setItem('userResp', JSON.stringify(data));
-          dispatch({ type: 'SIGN_IN', token: data.token });
+          dispatch({type: 'SIGN_IN', token: data.token});
         }
         //console.log('data == > ', data)
       },
@@ -90,16 +91,16 @@ const App = () => {
           await AsyncStorage.clear();
         }
         if (Platform.OS === 'ios') {
-          await AsyncStorage.getAllKeys().then(AsyncStorage.multiRemove)
+          await AsyncStorage.getAllKeys().then(AsyncStorage.multiRemove);
         }
-        dispatch({ type: 'SIGN_OUT' });
+        dispatch({type: 'SIGN_OUT'});
       },
-      signUp: async data => {
+      signUp: async (data) => {
         // In a production app, we need to send user data to server and get a token
         // We will also need to handle errors if sign up failed
         // After getting token, we need to persist the token using `AsyncStorage`
         // In the example, we'll use a dummy token
-        dispatch({ type: 'SIGN_IN', token: '' });
+        dispatch({type: 'SIGN_IN', token: ''});
       },
     }),
     [],
@@ -108,11 +109,13 @@ const App = () => {
   return (
     <AuthContext.Provider value={authContext}>
       <ApolloProvider client={apolloClient}>
-        <Navi
-          isLoading={state.isLoading}
-          userToken={state.userToken}
-          isSignout={state.isSignout}
-        />
+        <RecoilRoot>
+          <Navi
+            isLoading={state.isLoading}
+            userToken={state.userToken}
+            isSignout={state.isSignout}
+          />
+        </RecoilRoot>
       </ApolloProvider>
     </AuthContext.Provider>
   );

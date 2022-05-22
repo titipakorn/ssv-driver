@@ -13,8 +13,12 @@ import {useMutation} from '@apollo/react-hooks';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {modelStyles} from './Modal';
 import {useTranslation} from 'react-i18next';
+import {useSetRecoilState} from 'recoil';
+import {OccupiedState, workingJobID} from '../libs/atom';
 
 export default function DropoffButton({jobID}) {
+  const setOccupied = useSetRecoilState(OccupiedState);
+  const setWorkingJobID = useSetRecoilState(workingJobID);
   let handler = React.useRef(null);
   const {t} = useTranslation();
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -78,7 +82,6 @@ export default function DropoffButton({jobID}) {
             </View>
             <Text style={modelStyles.modalTitle}>
               {t('job.DropOffQuestion')}
-
             </Text>
             <TouchableHighlight
               style={{
@@ -96,7 +99,9 @@ export default function DropoffButton({jobID}) {
                 dropoff({
                   variables,
                 })
-                  .then((res) => {
+                  .then((_) => {
+                    setOccupied(false);
+                    setWorkingJobID(null);
                     // console.log('done: accepting job', res);
                     // console.log(res.data.update_trip.returning);
                   })

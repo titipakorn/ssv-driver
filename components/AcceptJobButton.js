@@ -13,6 +13,8 @@ import {useMutation} from '@apollo/react-hooks';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {modelStyles} from './Modal';
 import {useTranslation} from 'react-i18next';
+import {useSetRecoilState} from 'recoil';
+import {OccupiedState, workingJobID} from '../libs/atom';
 
 const ACCEPT_JOB_MUTATION = gql`
   mutation ACCEPT_JOB_MUTATION(
@@ -42,6 +44,8 @@ export default function AccepJobButton({jobID, userID}) {
   const [modalVisible, setModalVisible] = React.useState(false);
   const [processing, setProcessing] = React.useState(false);
   const [accept_job, {loading, error}] = useMutation(ACCEPT_JOB_MUTATION);
+  const setOccupied = useSetRecoilState(OccupiedState);
+  const setWorkingJobID = useSetRecoilState(workingJobID);
   // refetch should not be ncessary since it's subscription thing
   let buttontext = (
     <Text
@@ -118,7 +122,9 @@ export default function AccepJobButton({jobID, userID}) {
                 accept_job({
                   variables,
                 })
-                  .then((res) => {
+                  .then((_) => {
+                    setOccupied(true);
+                    setWorkingJobID(jobID);
                     // console.log('done: accepting job', res);
                     // console.log(res.data.update_trip.returning);
                   })

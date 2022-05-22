@@ -5,6 +5,9 @@ import {
   Text,
   View,
   ScrollView,
+  TouchableOpacity,
+  Linking,
+  Platform,
 } from 'react-native';
 import gql from 'graphql-tag';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -112,6 +115,8 @@ function ItemDisplay(props) {
     tmPrimary,
     tmSecondary,
     note,
+    place_from,
+    place_to,
   } = props.item;
   const {t} = useTranslation();
   const {userID} = props;
@@ -144,6 +149,16 @@ function ItemDisplay(props) {
   //   currStep =
   // } else {
   // }
+
+  const openMapApp = ({lat, lng, label}) => {
+    const scheme = Platform.select({ios: 'maps:0,0?q=', android: 'geo:0,0?q='});
+    const latLng = `${lat},${lng}`;
+    const url = Platform.select({
+      ios: `${scheme}${label}@${latLng}`,
+      android: `${scheme}${latLng}(${label})`,
+    });
+    Linking.openURL(url);
+  };
   return (
     <View
       style={{
@@ -233,8 +248,66 @@ function ItemDisplay(props) {
       )}
       {isYourJob && cancelled_at === null && (
         <>
-          {currStep === 'accept' && <PickupButton jobID={id} />}
-          {currStep === 'onboard' && <DropoffButton jobID={id} />}
+          {currStep === 'accept' && (
+            <>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#15c146',
+                  height: 55,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}
+                onPress={() => {
+                  openMapApp({
+                    lat: place_from.coordinates[1],
+                    lng: place_from.coordinates[0],
+                    label: from,
+                  });
+                }}>
+                <Text
+                  style={[
+                    {
+                      color: 'white',
+                      fontSize: 36,
+                    },
+                  ]}>
+                  {t('job.navigate')}
+                </Text>
+              </TouchableOpacity>
+              <PickupButton jobID={id} />
+            </>
+          )}
+          {currStep === 'onboard' && (
+            <>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#15c146',
+                  height: 55,
+                  marginBottom: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+                onPress={() => {
+                  openMapApp({
+                    lat: place_to.coordinates[1],
+                    lng: place_to.coordinates[0],
+                    label: to,
+                  });
+                }}>
+                <Text
+                  style={[
+                    {
+                      color: 'white',
+                      fontSize: 36,
+                    },
+                  ]}>
+                  {t('job.navigate')}
+                </Text>
+              </TouchableOpacity>
+              <DropoffButton jobID={id} />
+            </>
+          )}
           {currStep === 'done' && <FeedbackButton jobID={id} userID={userID} />}
         </>
       )}
