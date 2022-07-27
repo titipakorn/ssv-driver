@@ -159,6 +159,17 @@ function ItemDisplay(props) {
     });
     Linking.openURL(url);
   };
+
+  const openGoogleMap = ({lat, lng}) => {
+    Linking.openURL(
+      `https://www.google.com/maps/dir/?api=1&destination=` +
+        lat +
+        `,` +
+        lng +
+        `&travelmode=driving`,
+    );
+  };
+
   return (
     <View
       style={{
@@ -275,6 +286,30 @@ function ItemDisplay(props) {
                   {t('job.navigate')}
                 </Text>
               </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#15c146',
+                  height: 55,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}
+                onPress={() => {
+                  openGoogleMap({
+                    lat: place_from.coordinates[1],
+                    lng: place_from.coordinates[0],
+                  });
+                }}>
+                <Text
+                  style={[
+                    {
+                      color: 'white',
+                      fontSize: 36,
+                    },
+                  ]}>
+                  {t('job.navigateGoogle')}
+                </Text>
+              </TouchableOpacity>
               <PickupButton jobID={id} />
             </>
           )}
@@ -303,6 +338,30 @@ function ItemDisplay(props) {
                     },
                   ]}>
                   {t('job.navigate')}
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  backgroundColor: '#15c146',
+                  height: 55,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  marginBottom: 10,
+                }}
+                onPress={() => {
+                  openGoogleMap({
+                    lat: place_to.coordinates[1],
+                    lng: place_to.coordinates[0],
+                  });
+                }}>
+                <Text
+                  style={[
+                    {
+                      color: 'white',
+                      fontSize: 36,
+                    },
+                  ]}>
+                  {t('job.navigateGoogle')}
                 </Text>
               </TouchableOpacity>
               <DropoffButton jobID={id} />
