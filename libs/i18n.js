@@ -27,6 +27,9 @@ i18n
             In: 'In',
             At: 'At',
           },
+          map: {
+            Title: 'Status',
+          },
           signin: {
             Title: 'Sign In',
             Loading: 'Working...',
@@ -85,6 +88,9 @@ i18n
             MinuteAbbr: 'นาที',
             In: 'อีก',
             At: 'เมื่อ',
+          },
+          map: {
+            Title: 'สถานะ',
           },
           signin: {
             Title: 'เข้าระบบ',

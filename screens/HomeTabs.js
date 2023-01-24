@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import AvailableJobs from '../components/AvailableJobs';
 import Job from '../components/Job';
 import UserScreen from './UserScreen';
+import MapTab from './MapTab';
 import {useTranslation} from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
@@ -50,6 +51,8 @@ export default function HomeTabs() {
             iconName = focused ? 'ios-contact' : 'ios-contact';
           } else if (route.name === 'User') {
             iconName = focused ? 'ios-list' : 'ios-list';
+          } else if (route.name === 'Status') {
+            iconName = focused ? 'map' : 'map-outline';
           }
           // You can return any component that you like here!
           return <Icon name={iconName} size={size} color={color} />;
@@ -60,6 +63,7 @@ export default function HomeTabs() {
         inactiveTintColor: 'gray',
       }}>
       <Tab.Screen name="Home" component={IndexScreen} />
+      <Tab.Screen name="Status" component={MapTab} />
       <Tab.Screen name="User" component={UserScreen} />
     </Tab.Navigator>
   );
