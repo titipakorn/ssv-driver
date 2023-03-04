@@ -3,12 +3,8 @@ import dayjs from 'dayjs';
 import gql from 'graphql-tag';
 import {useMutation} from '@apollo/react-hooks';
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import {useSetRecoilState} from 'recoil';
-import {OccupiedState, workingJobID} from '../libs/atom';
 
 export default function TraceLogger({tripID, tripState, position}) {
-  const setOccupied = useSetRecoilState(OccupiedState);
-  const setWorkingJobID = useSetRecoilState(workingJobID);
   const [hasUploaded, setUploaded] = React.useState(false);
   const [log, setLog] = React.useState([]);
   const [tmsp, setTmsp] = React.useState(null);
@@ -54,8 +50,6 @@ export default function TraceLogger({tripID, tripState, position}) {
     X 5. over
     */
     if (tripID == undefined) {
-      setOccupied(false);
-      setWorkingJobID(null);
       return;
     }
     if (tripState == undefined) return;
@@ -63,8 +57,6 @@ export default function TraceLogger({tripID, tripState, position}) {
     if (tripState === 'wait') return;
     if (tripState === 'done' && log.length == 0) return;
 
-    setOccupied(true);
-    setWorkingJobID(tripID);
     const {coords, timestamp} = position;
     const item = {
       trip_id: tripID,

@@ -117,6 +117,7 @@ function ItemDisplay(props) {
     note,
     place_from,
     place_to,
+    is_shared,
   } = props.item;
   const {t} = useTranslation();
   const {userID} = props;
@@ -255,7 +256,7 @@ function ItemDisplay(props) {
       </ScrollView>
       {/* can start job only now and future job */}
       {currStep === 'wait' && cancelled_at === null && (
-        <AcceptJobButton jobID={id} userID={userID} />
+        <AcceptJobButton jobID={id} userID={userID} isShared={is_shared} />
       )}
       {isYourJob && cancelled_at === null && (
         <>
@@ -367,7 +368,7 @@ function ItemDisplay(props) {
               <DropoffButton jobID={id} />
             </>
           )}
-          {currStep === 'done' && <FeedbackButton jobID={id} userID={userID} />}
+          {/* {currStep === 'done' && <FeedbackButton jobID={id} userID={userID} />} */}
         </>
       )}
     </View>
@@ -436,6 +437,7 @@ const JOB_SUBSCRIPTION = gql`
       cancelled_at
       driver_feedback
       polyline
+      is_shared
       traces(order_by: {timestamp: desc}) {
         timestamp
         point

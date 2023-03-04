@@ -3,7 +3,7 @@ import Geolocation from '@react-native-community/geolocation';
 import gql from 'graphql-tag';
 import {useMutation} from '@apollo/react-hooks';
 import {useRecoilValue} from 'recoil';
-import {OccupiedState, workingJobID} from '../libs/atom';
+import {workingJobID} from '../libs/atom';
 const faye = require('faye');
 var client = new faye.Client('https://ssv-one.10z.dev/faye/faye');
 
@@ -13,8 +13,12 @@ export default function GeoLocationProvider({
   isActive = false,
 }) {
   const [addLog, {loading, error}] = useMutation(ADD_LOG_TRACES);
-  const occupied = useRecoilValue(OccupiedState);
-  const jobID = useRecoilValue(workingJobID);
+  const jobList = useRecoilValue(workingJobID);
+  var jobID = null;
+  if (jobList.length > 0) {
+    jobID = jobList[0];
+  }
+  const occupied = jobID !== null;
   let watchID = useRef(null);
   const [geo, setGeo] = useState({
     initialPosition: 'unknown',

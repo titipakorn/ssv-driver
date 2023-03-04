@@ -13,8 +13,8 @@ import {useMutation} from '@apollo/react-hooks';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {modelStyles} from './Modal';
 import {useTranslation} from 'react-i18next';
-import {useSetRecoilState} from 'recoil';
-import {OccupiedState, workingJobID} from '../libs/atom';
+import {useRecoilState} from 'recoil';
+import {workingJobID, isSharing} from '../libs/atom';
 
 const ACCEPT_JOB_MUTATION = gql`
   mutation ACCEPT_JOB_MUTATION(
@@ -38,14 +38,44 @@ const ACCEPT_JOB_MUTATION = gql`
   }
 `;
 
-export default function AccepJobButton({jobID, userID}) {
+const ACCEPT_SHARED_JOB_MUTATION = gql`
+  mutation ACCEPT_JOB_MUTATION(
+    $jobID: Int!
+    $userID: uuid!
+    $parentJobID: Int!
+    $now: timestamptz!
+  ) {
+    update_trip(
+      where: {id: {_eq: $jobID}}
+      _set: {
+        driver_id: $userID
+        accepted_at: $now
+        parent_trip_id: $parentJobID
+      }
+    ) {
+      affected_rows
+      returning {
+        id
+        driver {
+          username
+        }
+        accepted_at
+      }
+    }
+  }
+`;
+
+export default function AcceptJobButton({jobID, userID, isShared}) {
   let handler = React.useRef(null);
   const {t} = useTranslation();
   const [modalVisible, setModalVisible] = React.useState(false);
   const [processing, setProcessing] = React.useState(false);
   const [accept_job, {loading, error}] = useMutation(ACCEPT_JOB_MUTATION);
-  const setOccupied = useSetRecoilState(OccupiedState);
-  const setWorkingJobID = useSetRecoilState(workingJobID);
+  const [accept_shared_job, {loading: sLoading, error: sError}] = useMutation(
+    ACCEPT_SHARED_JOB_MUTATION,
+  );
+  const [jobList, setWorkingJobID] = useRecoilState(workingJobID);
+  const [jobSharing, setSharing] = useRecoilState(isSharing);
   // refetch should not be ncessary since it's subscription thing
   let buttontext = (
     <Text
@@ -58,9 +88,9 @@ export default function AccepJobButton({jobID, userID}) {
       {t('job.StartButtonLabel')}
     </Text>
   );
-  if (loading) {
+  if (loading || sLoading) {
     buttontext = <ActivityIndicator />;
-  } else if (error) {
+  } else if (error || sError) {
     buttontext = (
       <Text
         style={[
@@ -69,7 +99,8 @@ export default function AccepJobButton({jobID, userID}) {
             fontSize: 20,
           },
         ]}>
-        {error.message}
+        {error?.message}
+        {sError?.message}
       </Text>
     );
   }
@@ -113,20 +144,32 @@ export default function AccepJobButton({jobID, userID}) {
                 backgroundColor: '#2196F3',
               }}
               onPress={() => {
+                if (isShared) {
+                  if (jobList.length > 0) {
+                    if (jobSharing[0]) {
+                      const variables = {
+                        jobID,
+                        userID,
+                        parentJobID: jobList[0],
+                        now: new Date(),
+                      };
+                      return accept_shared_job({
+                        variables,
+                      });
+                    }
+                  }
+                }
                 const variables = {
                   jobID,
                   userID,
                   now: new Date(),
                 };
-                // console.log('press: accepting job', variables);
                 accept_job({
                   variables,
                 })
                   .then((_) => {
-                    setOccupied(true);
-                    setWorkingJobID(jobID);
-                    // console.log('done: accepting job', res);
-                    // console.log(res.data.update_trip.returning);
+                    setWorkingJobID([...jobList, jobID]);
+                    setSharing([...jobSharing, isShared]);
                   })
                   .catch((err) => {
                     console.log('err: ', err);

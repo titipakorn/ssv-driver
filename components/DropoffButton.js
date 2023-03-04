@@ -13,12 +13,12 @@ import {useMutation} from '@apollo/react-hooks';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {modelStyles} from './Modal';
 import {useTranslation} from 'react-i18next';
-import {useSetRecoilState} from 'recoil';
-import {OccupiedState, workingJobID} from '../libs/atom';
+import {useRecoilState} from 'recoil';
+import {workingJobID, isSharing} from '../libs/atom';
 
 export default function DropoffButton({jobID}) {
-  const setOccupied = useSetRecoilState(OccupiedState);
-  const setWorkingJobID = useSetRecoilState(workingJobID);
+  const [jobList, setWorkingJobID] = useRecoilState(workingJobID);
+  const [jobSharing, setJobIsSharing] = useRecoilState(isSharing);
   let handler = React.useRef(null);
   const {t} = useTranslation();
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -100,10 +100,19 @@ export default function DropoffButton({jobID}) {
                   variables,
                 })
                   .then((_) => {
-                    setOccupied(false);
-                    setWorkingJobID(null);
-                    // console.log('done: accepting job', res);
-                    // console.log(res.data.update_trip.returning);
+                    const indexToRemove = jobList.findIndex(
+                      (job) => job === jobID,
+                    );
+                    setWorkingJobID(
+                      jobList
+                        .slice(0, indexToRemove)
+                        .concat(jobList.slice(indexToRemove + 1)),
+                    );
+                    setJobIsSharing(
+                      jobSharing
+                        .slice(0, indexToRemove)
+                        .concat(jobSharing.slice(indexToRemove + 1)),
+                    );
                   })
                   .catch((err) => {
                     console.log('err: ', err);

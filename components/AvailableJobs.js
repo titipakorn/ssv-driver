@@ -16,6 +16,7 @@ import {useKeepAwake} from 'expo-keep-awake';
 import OverlayComponent from './OverlayComponent';
 import JobOverlay from './JobOverly';
 import {useTranslation} from 'react-i18next';
+import Icon from 'react-native-vector-icons/Ionicons';
 import RNBeep from 'react-native-a-beep';
 
 export default function AvailableJobsContainer() {
@@ -151,6 +152,7 @@ function Item(row) {
     driver_id,
     driver,
     userID,
+    is_shared,
   } = row;
   let relTime = tmPrimary;
   if (cancelled_at !== null) {
@@ -179,7 +181,14 @@ function Item(row) {
       <View style={[styles.flexRow]}>
         {from !== null && (
           <View style={[styles.flexColumn, {flex: 1}]}>
-            <Text style={styles.jobId}>Job ID {id}</Text>
+            <View style={[styles.flexRow, {alignItems: 'center'}]}>
+              <Text style={styles.jobId}>Job ID {id} </Text>
+              {is_shared ? (
+                <Icon name="people-sharp" size={30} color={'#5c9665'} />
+              ) : (
+                <Icon name="person-sharp" size={30} color={'#b20037'} />
+              )}
+            </View>
             <Text style={styles.locationPickup}>
               {taken ? '/taken/' : ''}
               {from}
@@ -281,6 +290,7 @@ const QUEUE_SUBSCRIPTION = gql`
         id
         username
       }
+      is_shared
     }
   }
 `;
