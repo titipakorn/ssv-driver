@@ -60,8 +60,8 @@ export default function Map({pins, trip, handleGeoInfo}) {
   let mapHandler = useRef(null);
   let watchID = useRef(null);
   const [region, setRegion] = useState({
-    latitude: 13.7385,
-    longitude: 100.5706,
+    latitude: 14.0735,
+    longitude: 100.6022,
     latitudeDelta: 0.0122,
     longitudeDelta: 0.0121,
   });

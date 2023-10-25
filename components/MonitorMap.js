@@ -151,8 +151,8 @@ export default function Map() {
             <Marker
               key={'start_location'}
               coordinate={{
-                longitude: 100.572538842281,
-                latitude: 13.7447328859144,
+                longitude: 100.60224141285296,
+                latitude: 14.07353618595782,
               }}
               // color={'#006400'}
             >
